@@ -1,5 +1,8 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "../components/Navbar";
 import "./globals.css";
+import icon from "./../public/images/Icon 1.png"
+import { jost, cormorant } from "./fonts";
+
 
 export const metadata = {
   title: "Create Next App",
@@ -11,8 +14,8 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
     >
-      <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
-        <Navbar/>
+      <body className={`${jost.variable} ${cormorant.variable} min-h-full flex flex-col`} cz-shortcut-listen="true">
+        <Navbar icon={icon} />
         {children}
       </body>
     </html>
