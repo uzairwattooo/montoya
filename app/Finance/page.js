@@ -129,19 +129,19 @@ const Finance = () => {
             </section>
             <div className="bg-[#F2E8D5] min-h-screen px-4 md:px-0">
                 <div className="max-w-299.5 mx-auto">
-<header className="bg-[#2D0A0A] text-white py-6 md:py-8 px-4 sm:px-6 w-full">
-  <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                    <header className="bg-[#2D0A0A] text-white py-6 md:py-8 px-4 sm:px-6 w-full">
+                        <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
 
-    <h2 className="font-cormorant italic text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-medium leading-tight md:leading-[70px] text-[#F3E6CF]">
-      Home Loan Application
-    </h2>
+                            <h2 className="font-cormorant italic text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-medium leading-tight md:leading-[70px] text-[#F3E6CF]">
+                                Home Loan Application
+                            </h2>
 
-    <p className="font-jost text-[14px] sm:text-[16px] md:text-[20px] font-light leading-normal md:leading-[30px] tracking-normal uppercase text-[#93776B]">
-      Secure · Encrypted · GDPR Compliant
-    </p>
+                            <p className="font-jost text-[14px] sm:text-[16px] md:text-[20px] font-light leading-normal md:leading-[30px] tracking-normal uppercase text-[#93776B]">
+                                Secure · Encrypted · GDPR Compliant
+                            </p>
 
-  </div>
-</header>
+                        </div>
+                    </header>
                 </div>
 
                 <main className="bg-white mb-10 shadow-sm p-8 md:p-16 lg:p-16 text-[#3D1A1A] w-full max-w-299.5 mx-auto">
@@ -254,25 +254,25 @@ const Finance = () => {
                                     <label className={labelClasses}>Additional Comments</label>
                                     <textarea rows={8} className={`${inputClasses} mt-3 rounded-lg`} placeholder="Any additional context about your application or situation..."></textarea>
                                 </div>
-<label className="flex items-start gap-4 cursor-pointer">
+                                <label className="flex items-start gap-4 cursor-pointer">
 
-  <input
-    type="checkbox"
-    className="mt-1 min-w-[52px] h-9 appearance-none border border-[#B4B4B4] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] transition-all"
-  />
+                                    <input
+                                        type="checkbox"
+                                        className="mt-1 min-w-[52px] h-9 appearance-none border border-[#B4B4B4] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] transition-all"
+                                    />
 
-  <span className="font-jost text-[14px] sm:text-[16px] font-light leading-6 tracking-normal uppercase text-[#B4B4B4]">
-    I consent to Montoya Roe conducting a credit check as part of my loan application.
-    I understand this will be handled in accordance with the Australian Privacy Act and GDPR guidelines.
-  </span>
+                                    <span className="font-jost text-[14px] sm:text-[16px] font-light leading-6 tracking-normal uppercase text-[#B4B4B4]">
+                                        I consent to Montoya Roe conducting a credit check as part of my loan application.
+                                        I understand this will be handled in accordance with the Australian Privacy Act and GDPR guidelines.
+                                    </span>
 
-</label>
+                                </label>
                             </div>
                         </section>
                         <div className="flex flex-col md:flex-row  gap-18 pt-10">
                             <button className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors">
-  Submit Application
-</button>
+                                Submit Application
+                            </button>
                             <p className="font-jost text-[14px] font-light leading-5 tracking-normal uppercase text-[#B2A79D] text-start">
                                 Protected by SSL encryption. <br /> Your data is never shared with third parties.
                             </p>
@@ -280,59 +280,55 @@ const Finance = () => {
                     </form>
                 </main>
             </div>
-<footer className="bg-[#0A0A0A] text-[#D9CDB8]/50 py-10 px-4 sm:px-8 md:px-12 lg:px-24">
-  <div className="max-w-299.5 mx-auto">
+            <footer className="bg-[#0A0A0A] text-[#D9CDB8]/50 py-10 px-4 sm:px-8 md:px-12 lg:px-24">
+                <div className="max-w-299.5 mx-auto">
 
-    <div className="w-full h-px bg-[#1E1E1E] mb-8"></div>
+                    <div className="w-full h-px bg-[#1E1E1E] mb-8"></div>
 
-    <div className="flex flex-col lg:flex-row justify-between items-center gap-6 text-[11px] tracking-widest uppercase">
+                    <div className="flex flex-col lg:flex-row justify-between items-center gap-6 text-[11px] tracking-widest uppercase">
 
-      {/* LEFT */}
-      <div className="text-center lg:text-left">
-        <p className="font-['Arial'] text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal text-[#44413B]">
-          © 2026 Montoya Roe. All rights reserved.
-        </p>
-      </div>
+                        <div className="text-center lg:text-left">
+                            <p className="font-['Arial'] text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal text-[#44413B]">
+                                © 2026 Montoya Roe. All rights reserved.
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-8">
 
-      {/* CENTER LINKS */}
-      <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-8">
+                            <Link
+                                href="#"
+                                className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
+                            >
+                                Privacy Policy
+                            </Link>
 
-        <Link
-          href="#"
-          className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
-        >
-          Privacy Policy
-        </Link>
+                            <Link
+                                href="#"
+                                className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
+                            >
+                                Terms of Use
+                            </Link>
 
-        <Link
-          href="#"
-          className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
-        >
-          Terms of Use
-        </Link>
+                            <Link
+                                href="#"
+                                className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
+                            >
+                                GDPR Compliance
+                            </Link>
 
-        <Link
-          href="#"
-          className="font-jost text-[14px] sm:text-[16px] font-light leading-[100%] tracking-normal normal-case hover:text-white/50 transition-colors"
-        >
-          GDPR Compliance
-        </Link>
+                        </div>
 
-      </div>
+                        <div className="text-center lg:text-right">
+                            <Link
+                                href="https://montoyaroe.com"
+                                className="font-['Arial'] text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal uppercase text-[#44413B] hover:text-white/50"
+                            >
+                                MONTOYAROE.COM
+                            </Link>
+                        </div>
 
-      {/* RIGHT */}
-      <div className="text-center lg:text-right">
-        <Link
-          href="https://montoyaroe.com"
-          className="font-['Arial'] text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal uppercase text-[#44413B] hover:text-white/50"
-        >
-          MONTOYAROE.COM
-        </Link>
-      </div>
-
-    </div>
-  </div>
-</footer>
+                    </div>
+                </div>
+            </footer>
         </>
     );
 };
