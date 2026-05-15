@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -27,10 +28,15 @@ export default function Navbar() {
 
                         {pathname === "/" ? (
                             <>
-                            <button className="w-34.5 h-12 px-4 py-3 gap-2 bg-[#400505] text-[#F3E6CF] font-jost text-[14px] font-normal uppercase flex items-center justify-center hover:bg-[#F3E6CF] hover:text-[#400505] transition-all">
-                                Apply now
-                            </button>
-
+                                <button className="w-34.5 h-12 px-4 py-3 gap-2 bg-[#400505] text-[#F3E6CF] font-jost text-[14px] font-normal uppercase flex items-center justify-center hover:bg-[#F3E6CF] hover:text-[#400505] transition-all">
+                                    Apply now
+                                </button>
+                                <Link
+                                    href="/Finance"
+                                    className="w-34.5 h-12 px-4 py-3 gap-2 bg-[#400505] text-[#F3E6CF] font-jost text-[14px] font-normal uppercase flex items-center justify-center hover:bg-[#F3E6CF] hover:text-[#400505] transition-all"
+                                >
+                                    Finance
+                                </Link>
                             </>
                         ) : (
                             <>
