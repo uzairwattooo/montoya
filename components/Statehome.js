@@ -51,7 +51,7 @@ const points = [
     }
 ];
 
-const Statesection = () => {
+const Statehome = () => {
     return (
         <>
             <section className="w-full bg-[#2D0A0A] py-12 px-6">
@@ -163,14 +163,14 @@ const Statesection = () => {
             </section>
 
             <section className="w-full bg-[#3B0D0D] py-10 px-6 md:px-12 lg:px-24">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-10"> z
-                    <h2 className="text-center md:text-left font-cormorant text-[32px] sm:text-[40px] md:text-[48px] font-medium leading-tight tracking-[-0.02em] text-[#F3E6CF]">
+                <div className="max-w-6xl flex justify-between flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-10">
+                    <h2 className="text-start md:text-left font-cormorant text-[32px] sm:text-[40px] md:text-[48px] font-medium leading-tight tracking-[-0.02em] text-[#F3E6CF]">
                         Ready to take your{" "}
                         <span className="italic">
                             next <br className="hidden md:block" /> step?
                         </span>
                     </h2>
-                    <button className="w-full md:w-auto font-jost cursor-pointer bg-[#F3E6CF] text-[#3B0D0D] px-8 py-4 text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#d8d0b8] transition-colors">
+                    <button className="w-full md:w-auto font-jost cursor-pointer bg-[#F3E6CF] text-[#3B0D0D] px-8 py-4 text-[14px] font-normal tracking-[0.15em] uppercase hover:bg-[#d8d0b8] transition-colors">
                         Start Your Application
                     </button>
 
@@ -180,4 +180,4 @@ const Statesection = () => {
     );
 };
 
-export default Statesection;
+export default Statehome;

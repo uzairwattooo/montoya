@@ -1,4 +1,4 @@
-import Statesection from "../components/Statesection";
+import Statehome from "../components/Statehome";
 import Footer from "../components/Footer";
 import HeroSection from "../components/Hero";
 
@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <Statesection/>
+      <Statehome/>
       <Footer/>
     </>
   )

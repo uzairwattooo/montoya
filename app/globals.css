@@ -11,7 +11,13 @@
 .font-cormorant {
   font-family: var(--font-cormorant);
 }
-
+.scrollbar-hide{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 .hover-accent {
   transition: color 0.3s ease;
 }
