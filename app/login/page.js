@@ -1,3 +1,4 @@
+"use client"
 
 import Image from "next/image";
 import Link from "next/link";
@@ -56,7 +57,7 @@ const LoginPage = () => {
                             </Link>
                         </p>
                     </div>
-                    <form className="w-full space-y-6">
+                    <form className="w-full space-y-6" onSubmit={(e) => e.preventDefault()}>
                         <div className="flex flex-col gap-2">
                             <label className="font-jost text-[14px] font-light leading-[100%] tracking-normal uppercase text-[#977F7F]">
                                 Email Address

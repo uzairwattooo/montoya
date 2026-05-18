@@ -1,4 +1,3 @@
-import MeanFinance from "@/components/MeanFinance";
 import SmalFooter from "@/components/SmalFooter";
 import { Check, Play } from "lucide-react";
 import Link from "next/link";
@@ -274,7 +273,6 @@ export default function Development() {
 
                 </div>
             </section>
-            <MeanFinance/>
             <SmalFooter />
         </>
     )
