@@ -1,4 +1,4 @@
-
+import Export from "@/public/icons/export.svg";
 const Documents = () => {
 
   const documents = [
@@ -67,21 +67,9 @@ const Documents = () => {
                     </div>
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center gap-3 bg-[#FAF6EF] text-[#3B0D0D] border border-[#491E1C] font-jost text-[14px] font-normal tracking-wider px-6 py-3.5  transition-all duration-200 hover:bg-[#3B0D0D] hover:text-[#F3E6CF] active:opacity-90 group"
+                      className="inline-flex items-center justify-center  bg-[#FAF6EF] text-[#3B0D0D] border border-[#491E1C] font-jost text-[14px] font-normal tracking-wider px-4 py-1.5  transition-all duration-200 hover:bg-[#3B0D0D] hover:text-[#F3E6CF] active:opacity-90 group"
                     >
-                      <svg
-                        className="w-4 h-4 text-[#3B0D0D] group-hover:text-[#F3E6CF] transition-colors duration-200"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="12" y1="15" x2="12" y2="6"></line>
-                        <polyline points="7 10 12 5 17 10"></polyline>
-                        <path d="M3 16.5v3.5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3.5"></path>
-                      </svg>
+                      <span className="mt-2"><Export/></span>
                       <span className="uppercase font-medium tracking-wider">
                         Download
                       </span>

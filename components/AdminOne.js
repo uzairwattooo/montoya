@@ -1,4 +1,4 @@
-
+import Export from "@/public/icons/export.svg";
 export default function Admin_Dashboard() {
     const submissions = [
         { ref: '#MR-2026-001', name: 'James Anderson', email: 'james@example.com', type: 'Finance', date: '12 Apr 2026', status: 'UNDER REVIEW', action: 'MARK AS REVIEWED' },
@@ -7,7 +7,7 @@ export default function Admin_Dashboard() {
         { ref: '#MR-2026-001', name: 'James Anderson', email: 'james@example.com', type: 'Finance', date: '12 Apr 2026', status: 'REVIEWED', action: 'VIEW APPLICATION' },
         { ref: '#MR-2026-001', name: 'James Anderson', email: 'james@example.com', type: 'Finance', date: '12 Apr 2026', status: 'REVIEWED', action: 'VIEW APPLICATION' },
     ];
-    
+
     const statsCards = [
         { title: "Total Submissions", count: "8", sub: "All service types" },
         { title: "Under Review", count: "3", sub: "Actively being assessed" },
@@ -45,22 +45,13 @@ export default function Admin_Dashboard() {
                     </h3>
                     <button
                         type="button"
-                        className="inline-flex items-center justify-center gap-3 border border-[#E8D5B0] bg-[#3B0D0D] hover:bg-[#2A0808] transition-all text-[#F3E6CF] font-jost text-[14px] font-normal tracking-wider px-5 py-3  active:opacity-90 group"
+                        className="inline-flex items-center justify-center border border-[#E8D5B0] bg-[#44413B] hover:bg-[#2A0808] transition-all text-[#F3E6CF] font-jost text-[14px] font-normal tracking-wider px-5 py-1 active:opacity-90"
                     >
-                        <svg
-                            className="w-4 h-4 text-[#F3E6CF] transition-colors duration-200"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <line x1="12" y1="15" x2="12" y2="6"></line>
-                            <polyline points="7 10 12 5 17 10"></polyline>
-                            <path d="M3 16.5v3.5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3.5"></path>
-                        </svg>
-                        <span className="font-jost font-normal text-[14px] leading-4.5 text-center uppercase">
+                        <span className="flex items-center justify-center mt-2">
+                            <Export/>
+                        </span>
+
+                        <span className="uppercase">
                             Export csv
                         </span>
                     </button>

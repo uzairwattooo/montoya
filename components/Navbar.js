@@ -22,7 +22,7 @@ export default function Navbar() {
         <>
             <nav className="bg-[#F3E6CF] py-2">
                 <div className="container mx-auto flex items-center justify-between p-4 md:px-6">
-                    <div className="flex items-center gap-2 md:gap-3">
+                    <Link href="/" className="flex items-center gap-2 md:gap-3">
                         <Image
                             src="/images/icon-1.png"
                             width={84}
@@ -33,7 +33,7 @@ export default function Navbar() {
                         <h1 className="font-jost font-medium text-lg md:text-[23.69px] leading-none tracking-tight">
                             MONTOYA ROE
                         </h1>
-                    </div>
+                    </Link>
                     <div className="hidden md:flex items-center gap-4">
 
                         {pathname === "/" ? (

@@ -1,4 +1,4 @@
-
+import Vector from "@/public/icons/Vector.svg";
 export default function AdminAllApplications() {
     const applications = [
         { id: 1, ref: '#MR-2026-001', name: 'James Anderson', email: 'james@example.com', type: 'Finance', date: '12 Apr 2026', status: 'UNDER REVIEW', action: 'MARK AS REVIEWED' },
@@ -20,24 +20,22 @@ export default function AdminAllApplications() {
                     <input type="text" className="w-full  bg-[#FFF4E0] border-none mt-2.5 p-4 font-jost text-[14px]  mr-5 font-normal leading-[100%] tracking-normal text-[#ACA79D] placeholder:text-[#ACA79D]/50 focus:ring-1 focus:ring-[#3D1A1A]/20 outline-none transition-all" placeholder="Search by name, email or ref" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-2 text-[#EBE5DA]  font-jost font-normal text-[14px] leading-4.5 uppercase">
+                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-5 text-[#EBE5DA] font-jost font-normal text-[14px] leading-4.5 uppercase">
                         <span>Service Type</span>
-                        <span className="flex flex-col items-center justify-center w-3.25 h-5 rotate-90 text-[#EBE5DA]">
-                            ›
+                        <span >
+                           <Vector/>
                         </span>
                     </button>
-                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-2 text-[#EBE5DA] font-jost font-normal text-[14px] leading-4.5 uppercase">
+                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-5 text-[#EBE5DA] font-jost font-normal text-[14px] leading-4.5 uppercase">
                         <span>Status</span>
-
-                        <span className="flex flex-col items-center justify-center w-3.25 h-5 rotate-90 text-[#EBE5DA]">
-                            ›
+                        <span >
+                           <Vector/>
                         </span>
                     </button>
-                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-2 text-[#EBE5DA] font-jost font-normal text-[14px] leading-4.5 uppercase">
+                    <button className="w-71.5 h-11.5 bg-[#44413B] rounded-sm px-4 py-3 flex items-center justify-center gap-5 text-[#EBE5DA] font-jost font-normal text-[14px] leading-4.5 uppercase">
                         <span>This Week</span>
-
-                        <span className="flex flex-col items-center justify-center w-3.25 h-5 rotate-90 text-[#EBE5DA]">
-                            ›
+                        <span >
+                           <Vector/>
                         </span>
                     </button>
                 </div>

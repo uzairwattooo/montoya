@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 export default function AdminAccess() {
@@ -15,7 +16,7 @@ export default function AdminAccess() {
     return (
         <div className="w-full flex flex-col items-center">
             <header className="w-full bg-[#3B0D0D] text-[#F3E6CF] py-5 px-4 text-center flex flex-col items-center justify-center">
-                <div className="flex items-center gap-2 md:gap-3 p-6">
+                <Link href="/" className="flex items-center gap-2 md:gap-3 p-6">
                     <Image
                         src="/images/icon-2.png"
                         width={84}
@@ -26,7 +27,7 @@ export default function AdminAccess() {
                     <h1 className="font-jost font-medium text-[23.69px] md:text-[23.69px] text-[#F3E6CF] leading-none tracking-tight">
                         MONTOYA ROE
                     </h1>
-                </div>
+                </Link>
                 <h1 className="font-cormorant text-[64px] font-medium text-[#F3E6CF] leading-16 tracking-[-0.02em] mb-4">
                     Admin Access
                 </h1>

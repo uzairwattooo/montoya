@@ -10,7 +10,7 @@ const LoginPage = () => {
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-white">
             <div className="bg-[#3B0D0D] text-[#F9F6F0] p-8 md:p-16 lg:p-24 flex flex-col justify-between min-h-[40vh] md:min-h-screen">
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 md:gap-3">
+                    <Link href="/" className="flex items-center gap-2 md:gap-3">
                         <Image
                             src="/images/icon-2.png"
                             width={84}
@@ -21,7 +21,7 @@ const LoginPage = () => {
                         <h1 className="font-jost font-medium text-lg md:text-[23.69px] text-[#F3E6CF] leading-none tracking-tight">
                             MONTOYA ROE
                         </h1>
-                    </div>
+                    </Link>
                 </div>
                 <div className="max-w-93.25 my-auto pt-12 md:pt-0">
                     <h1 className="font-cormorant text-[64px] font-medium leading-16 tracking-[-0.02em] text-[#F3E6CF]">
