@@ -13,7 +13,7 @@ export default function Navbar() {
             setMenuOpen((prev) => !prev)
         }, 1500)
     }
-    const allowedRoutes = ["/", "/finance", "/development", "/international"]
+    const allowedRoutes = ["/", "/firstpage", "/development", "/international"]
     const showNavbar = allowedRoutes.some(route =>
     pathname === route || pathname.startsWith(route + "/")
     )
@@ -44,9 +44,9 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <Link href="/finance"
+                                <Link href="/firstpage"
                                     className={`font-jost text-[14px] font-normal leading-[100%] uppercase text-center text-[#3B0D0D] transition-all underline-offset-4
-        ${pathname === "/finance" ? "underline" : "hover:underline"}`}
+        ${pathname === "/firstpage" ? "underline" : "hover:underline"}`}
                                 >
                                     Finance
                                 </Link>
@@ -81,7 +81,7 @@ export default function Navbar() {
                     <div className="absolute right-4 mt-3 w-48 bg-white shadow-lg border border-gray-200 flex flex-col z-50">
                         {pathname === "/" ? (
                             <>
-                                <Link href="/finance" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">Finance</Link>
+                                <Link href="/firstpage" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">Finance</Link>
                                 <Link href="/development" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">Development</Link>
                                 <Link href="/international" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">International</Link>
                             </>

@@ -17,7 +17,7 @@ const items = [
     },
 ];
 
-const Finance = () => {
+const Firstpage = () => {
     const [selected, setSelected] = useState('home');
 
 
@@ -442,4 +442,4 @@ const Finance = () => {
     );
 };
 
-export default Finance;
+export default Firstpage;
