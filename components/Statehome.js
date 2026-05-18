@@ -170,7 +170,7 @@ const Statehome = () => {
                             next <br className="hidden md:block" /> step?
                         </span>
                     </h2>
-                    <button className="w-full md:w-auto font-jost cursor-pointer bg-[#F3E6CF] text-[#3B0D0D] px-8 py-4 text-[14px] font-normal tracking-[0.15em] uppercase hover:bg-[#d8d0b8] transition-colors">
+                    <button className="w-full md:w-auto font-jost cursor-pointer bg-[#F3E6CF] text-[#3B0D0D] px-8 py-4 text-[14px] font-normal tracking-normal uppercase hover:bg-[#d8d0b8] transition-colors">
                         Start Your Application
                     </button>
 
