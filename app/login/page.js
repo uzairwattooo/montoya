@@ -1,4 +1,3 @@
-"use client"
 
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +11,7 @@ const LoginPage = () => {
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 md:gap-3">
                         <Image
-                            src="/images/Icon 1 (1).png"
+                            src="/images/icon-2.png"
                             width={84}
                             height={82}
                             alt="icon"
@@ -57,7 +56,7 @@ const LoginPage = () => {
                             </Link>
                         </p>
                     </div>
-                    <form className="w-full space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <form className="w-full space-y-6">
                         <div className="flex flex-col gap-2">
                             <label className="font-jost text-[14px] font-light leading-[100%] tracking-normal uppercase text-[#977F7F]">
                                 Email Address
