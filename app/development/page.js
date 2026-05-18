@@ -2,6 +2,12 @@ import SmalFooter from "@/components/SmalFooter";
 import { Check, Play } from "lucide-react";
 import Link from "next/link";
 
+const items = [
+    { id: 1, name: "Joint Ventures" },
+    { id: 2, name: "Partnership Capital" },
+    { id: 3, name: "Project Finance" },
+];
+
 export default function Development() {
     const inputClasses = "w-full bg-[#FFF4E0] border-none mt-2.5 p-4 rounded-lg font-jost text-[14px] font-normal leading-[100%] tracking-[0] text-[#ACA79D] placeholder:text-[#ACA79D]/50 focus:ring-1 focus:ring-[#3D1A1A]/20 outline-none transition-all";
     const labelClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] uppercase text-[#977F7F] mb-2";
@@ -33,33 +39,21 @@ export default function Development() {
                     <div className="w-full lg:w-100 text-[#8C7B6B]">
 
                         <ul className="space-y-6 lg:space-y-2">
-
-                            <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                                <span className="w-2 h-2 rounded-full bg-[#E9D6B2]"></span>
-                                <span className="font-cormorant text-[#3B0D0D] text-[24px] font-normal leading-13 tracking-normal uppercase">
-                                    Joint Ventures
-                                </span>
-                            </li>
-                            <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                                <span className="w-2 h-2 rounded-full bg-[#E9D6B2]"></span>
-                                <span className="font-cormorant text-[#3B0D0D] text-[24px] font-normal leading-13 tracking-normal uppercase">
-                                    Partnership Capital
-
-                                </span>
-                            </li>
-                            <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                                <span className="w-2 h-2 rounded-full bg-[#E9D6B2]"></span>
-                                <span className="font-cormorant text-[#3B0D0D] text-[24px] font-normal leading-13 tracking-normal uppercase">
-                                    Project Finance
-                                </span>
-                            </li>
+                            {items.map((item) => (
+                                <li
+                                    key={item.id}
+                                    className="flex gap-3 md:gap-4 group hover-accent items-center cursor-pointer">
+                                    <span className="w-2 h-2 rounded-full bg-[#E9D6B2] transition-transform duration-300 group-hover:scale-125 group-hover:bg-[#3B0D0D]"></span>
+                                    <span className="font-cormorant text-[#3B0D0D] text-[24px] font-normal leading-13 tracking-normal uppercase transition-colors duration-300 group-hover:text-[#8D6E63]">
+                                        {item.name}
+                                    </span>
+                                </li>
+                            ))}
                         </ul>
                         <p className="font-cormorant italic text-[32px] font-medium leading-10 mt-4 tracking-[-0.02em] text-[#3B0D0D]">
                             "Creating legacy through precision, partnership, and long-term vision."
                         </p>
-
                     </div>
-
                 </div>
             </section>
             <div className="grid grid-cols-1 bg-[#F3E6CF] gap-8 lg:grid-cols-2 max-w-8xl">
@@ -110,7 +104,7 @@ export default function Development() {
                 </div>
 
             </section>
-            
+
             <div className="bg-[#F2E8D5] min-h-screen px-4 md:px-0">
                 <div className="max-w-299.5 mx-auto">
                     <header className="bg-[#2D0A0A] text-white py-6 md:py-8 px-4 sm:px-6 w-full">
