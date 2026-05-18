@@ -10,7 +10,7 @@ export default function AdminFinance() {
         { id: 7, ref: '#MR-2026-001', name: 'James Anderson', email: 'james@example.com', type: 'Finance', date: '12 Apr 2026', status: 'REVIEWED', action: 'VIEW APPLICATION' },
     ]
     return (
-        <div className="p-12 max-w-7xl w-full mx-auto space-y-8 flex-1 overflow-scroll">
+        <div className="p-4 md:p-6 lg:p-12 max-w-7xl w-full mx-auto space-y-8 flex-1 overflow-scroll">
 
             <h1 className="font-cormorant font-medium text-[#3B0D0D] text-[54px] leading-15 tracking-[-0.02em]">
                 Finance

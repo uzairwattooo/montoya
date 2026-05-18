@@ -15,7 +15,7 @@ export default function Admin_Dashboard() {
         { title: "Reviewed", count: "3", sub: "Assessment complete" },
     ];
     return (
-        <main className="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto lg:p-12 overflow-scroll">
+        <main className="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto p-4 md:p-6 lg:p-12 overflow-scroll">
             <p className="font-jost text-[16px] font-normal text-[#93776B] mb-4">
                 Here&apos;s an overview of all applications submitted at Montoya Roe.
             </p>

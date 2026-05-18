@@ -78,6 +78,8 @@ export default function AdminAccess() {
                 <p className="font-jost text-[16px] font-normal text-[#977F7F] tracking-wide">
                     Protected by SSL · Admin access only
                 </p>
+                <Link href="/admin/admindashboard" className='font-jost text-[16px] font-normal text-[#977F7F] tracking-wide hover:text-blue-300'>Admin dashboard has been added temporarily for checking purposes
+                </Link>
             </footer>
 
         </div>

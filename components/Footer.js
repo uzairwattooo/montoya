@@ -1,5 +1,6 @@
 import Image from "next/image";
 import imagefooter from "./../public/images/5 1.png";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -29,9 +30,9 @@ const Footer = () => {
                 Services
               </h4>
               <ul className="space-y-3 text-sm font-sans text-[#888174]">
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">Finance</li>
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">Development Partnership</li>
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">International Development</li>
+                <li><Link href="/firstpage" className="font-jost cursor-pointer hover:text-[#E5D5C5]">Finance</Link></li>
+                <li><Link href="/development" className="font-jost cursor-pointer hover:text-[#E5D5C5]">Development Partnership</Link></li>
+                <li><Link href="/international" className="font-jost cursor-pointer hover:text-[#E5D5C5]">International Development</Link></li>
               </ul>
             </div>
 
@@ -40,9 +41,9 @@ const Footer = () => {
                 Account
               </h4>
               <ul className="space-y-6 text-sm font-sans text-[#888174]">
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">Sign Up</li>
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">Login</li>
-                <li className="font-jost cursor-pointer hover:text-[#E5D5C5]">My Applications</li>
+                <li><Link href="/signup" className="font-jost cursor-pointer hover:text-[#E5D5C5]">Sign Up</Link></li>
+                <li><Link href="/login" className="font-jost cursor-pointer hover:text-[#E5D5C5]">Login</Link></li>
+                <li><Link href="/dashboard" className="font-jost cursor-pointer hover:text-[#E5D5C5]">My Applications</Link></li>
               </ul>
             </div>
 

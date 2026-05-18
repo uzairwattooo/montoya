@@ -35,7 +35,7 @@ export default function Dashboard() {
         <>
             
         <hr className="text-[#E8D5B0]"/>
-        <main className="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto lg:p-12 space-y-8">
+        <main className="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto p-4 md:p-6 lg:p-12 space-y-8">
             <div>
                 <h1 className="font-cormorant text-[48px] font-medium text-[#3B0D0D] leading-13.5 tracking-[-0.02em]">
                     Good morning, <span className="italic">James</span>.
