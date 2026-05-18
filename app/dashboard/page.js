@@ -15,7 +15,7 @@ const ClientDashboard = () => {
                 <div>
                     <div className="flex items-center gap-2 md:gap-3 p-6">
                         <Image
-                            src="/images/Icon 1 (1).png"
+                            src="/images/icon-2.png"
                             width={84}
                             height={82}
                             alt="icon"
@@ -29,7 +29,6 @@ const ClientDashboard = () => {
                         <h4 className="font-jost text-[18px] font-normal text-[#F3E6CF] leading-[100%]">
                             James Anderson
                         </h4>
-
                         <span className="font-jost text-[14px] font-light uppercase tracking-wider text-[#977F7F] mt-1.5 block">
                             Client Portal
                         </span>

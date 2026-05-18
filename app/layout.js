@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import "./globals.css";
-import icon from "./../public/images/Icon 1.png"
+import icon from "./../public/images/icon-1.png"
 import { jost, cormorant } from "./fonts";
 
 

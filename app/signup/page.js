@@ -12,7 +12,7 @@ export default function Signup() {
                 <div className="bg-[#3B0D0D] text-[#F3E6CF] p-8 md:p-16 lg:p-24 flex flex-col justify-between min-h-[40vh] md:min-h-screen">
                     <div className="flex items-center gap-2 md:gap-3">
                         <Image
-                            src="/images/Icon 1 (1).png"
+                            src="/images/icon-2.png"
                             width={84}
                             height={82}
                             alt="icon"

@@ -17,7 +17,7 @@ export default function AdminAccess() {
             <header className="w-full bg-[#3B0D0D] text-[#F3E6CF] py-5 px-4 text-center flex flex-col items-center justify-center">
                 <div className="flex items-center gap-2 md:gap-3 p-6">
                     <Image
-                        src="/images/Icon 1 (1).png"
+                        src="/images/icon-2.png"
                         width={84}
                         height={82}
                         alt="icon"

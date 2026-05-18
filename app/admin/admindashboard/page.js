@@ -15,7 +15,7 @@ export default function AdminDashboardMean() {
                     <div className="p-4 border-b border-[#441E1E]/50">
                         <div className="flex items-center gap-2 md:gap-3 p-3">
                             <Image
-                                src="/images/Icon 1 (1).png"
+                                src="/images/icon-2.png"
                                 width={84}
                                 height={82}
                                 alt="icon"
