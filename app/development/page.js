@@ -157,7 +157,7 @@ export default function Development() {
                                 <div>
                                     <label className={labelClasses}>Development Type *</label>
                                     <select className={`${inputClasses} text-black/80`}>
-                                        <option>Select status</option>
+                                        <option >Select status</option>
                                     </select>
                                 </div>
                                 <div>

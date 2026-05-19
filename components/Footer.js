@@ -40,7 +40,7 @@ const Footer = () => {
               <ul className="space-y-5 text-[#8C7B6B]">
                 <li><Link href="/signup" className="font-jost hover:text-[#E5D5C5]">Sign Up</Link></li>
                 <li><Link href="/login" className="font-jost hover:text-[#E5D5C5]">Login</Link></li>
-                <li><Link href="/dashboard" className="font-jost hover:text-[#E5D5C5]">My <br /> Applications</Link></li>
+                <li><Link href="/dashboard" className="font-jost hover:text-[#E5D5C5]">My Applications</Link></li>
               </ul>
             </div>
             <div>
@@ -51,7 +51,7 @@ const Footer = () => {
               <ul className="space-y-2 lg:space-y-5 md:space-y-1 text-[#8C7B6B]">
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">Privacy Policy</li>
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">Terms of Use</li>
-                <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">GDPR <br /> Compliance</li>
+                <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">GDPR Compliance</li>
               </ul>
             </div>
 

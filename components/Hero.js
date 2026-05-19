@@ -23,9 +23,9 @@ const Hero = () => {
               and infrastructure to fund what matters most.
             </p>
 
-            <h1 className="font-cormorant text-[40px] md:text-[56px] lg:text-[68px] font-medium leading-[70px] tracking-[-0.02em] text-[#3B0D0D]">
-              Building <span className="italic">value.</span> <br />
-              Shaping the future.
+            <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-medium leading-tight tracking-tight text-[#3B0D0D]">
+              Building <span className="italic">value.</span>
+              <span className="block">Shaping the future.</span>
             </h1>
           </div>
           <div className="w-full lg:w-60 text-gray-800">

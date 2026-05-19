@@ -11,12 +11,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-    >
-      <body className={`${jost.variable} ${cormorant.variable} min-h-full flex flex-col`} cz-shortcut-listen="true">
+    <html lang="en">
+      <body className={`${jost.variable} ${cormorant.variable} antialiased`} cz-shortcut-listen="true">
+        <a href="#main" className="sr-only focus:not-sr-only">
+          Skip to content
+        </a>
+
         <Navbar icon={icon} />
-        {children}
+
+        <main id="main" className="min-h-screen flex flex-col">
+          {children}
+        </main>
       </body>
     </html>
   );
