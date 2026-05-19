@@ -67,9 +67,9 @@ const Footer = () => {
             © 2026 Montoya Roe. All rights reserved.
           </p>
 
-          <p className="font-['Arial'] text-[16px] font-normal leading-6.75 tracking-normal text-right uppercase text-[#44413B]">
+          <Link href="https://montoyaroe.com" target="__blank" className="font-['Arial'] text-[16px] coursor-pointer font-normal leading-6.75 tracking-normal text-right uppercase text-[#44413B]">
             montoyaroe.com
-          </p>
+          </Link>
 
         </div>
 

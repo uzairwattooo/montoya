@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Hero = () => {
   return (
     <>
@@ -21,7 +23,7 @@ const Hero = () => {
               and infrastructure to fund what matters most.
             </p>
 
-            <h1 className="font-cormorant text-[40px] md:text-[56px] lg:text-[68px] font-[500] leading-[70px] tracking-[-0.02em] text-[#3B0D0D]">
+            <h1 className="font-cormorant text-[40px] md:text-[56px] lg:text-[68px] font-medium leading-[70px] tracking-[-0.02em] text-[#3B0D0D]">
               Building <span className="italic">value.</span> <br />
               Shaping the future.
             </h1>
@@ -31,24 +33,30 @@ const Hero = () => {
             <ul className="space-y-6 lg:space-y-2">
 
               <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <span className="font-cormorant text-[20px] md:text-[24px]">01.</span>
-                <span className="font-cormorant text-[28px] md:text-[40px] italic">
-                  Finance
-                </span>
+                <Link href="/firstpage">
+                  <span className="font-cormorant text-[20px] md:text-[24px]">01.</span>
+                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+                    Finance
+                  </span>
+                </Link>
+              </li>
+              <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
+                <Link href="/development">
+
+                  <span className="font-cormorant text-[20px] md:text-[24px]">02.</span>
+                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+                    Development
+                  </span>
+                </Link>
               </li>
 
               <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <span className="font-cormorant text-[20px] md:text-[24px]">02.</span>
-                <span className="font-cormorant text-[28px] md:text-[40px] italic">
-                  Development
-                </span>
-              </li>
-
-              <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <span className="font-cormorant text-[20px] md:text-[24px]">03.</span>
-                <span className="font-cormorant text-[28px] md:text-[40px] italic">
-                  International
-                </span>
+                <Link href="/international">
+                  <span className="font-cormorant text-[20px] md:text-[24px]">03.</span>
+                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+                    International
+                  </span>
+                </Link>
               </li>
 
             </ul>

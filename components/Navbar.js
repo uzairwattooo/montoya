@@ -30,7 +30,7 @@ export default function Navbar() {
                             alt="icon"
                             className="h-auto w-8 md:w-12"
                         />
-                        <h1 className="font-jost font-medium text-lg md:text-[23.69px] leading-none tracking-tight">
+                        <h1 className="font-jost font-medium text-[#3F0505] text-lg md:text-[23.69px] leading-none tracking-tight">
                             MONTOYA ROE
                         </h1>
                     </Link>
@@ -40,9 +40,6 @@ export default function Navbar() {
                             <>
                                 <Link href="/signup" className=" w-34.5 h-12 px-4 py-3 gap-2 bg-[#400505] text-[#F3E6CF] font-jost text-[14px] font-normal uppercase hidden md:block lg:flex items-center justify-center hover:bg-[#F3E6CF] hover:text-[#400505] transition-all">
                                     Apply now
-                                </Link>
-                                <Link href="/admin" className=" w-34.5 h-12 px-4 py-3 gap-2 bg-[#400505] text-[#F3E6CF] font-jost text-[14px] font-normal uppercase hidden md:block lg:flex items-center justify-center hover:bg-[#F3E6CF] hover:text-[#400505] transition-all">
-                                    Admin login
                                 </Link>
                             </>
                         ) : (
@@ -81,12 +78,17 @@ export default function Navbar() {
                     </div>
                 </div>
                 {menuOpen && (
-                    <div className="absolute right-4 mt-3 w-48 bg-[#F3E6CF] shadow-lg border border-[#400505] flex flex-col z-50">
+                    <div className="absolute lg:hidden right-4 mt-3 w-48 bg-[#F3E6CF] shadow-lg border border-[#400505] flex flex-col z-50">
                         {pathname === "/" ? (
                             <>
-                                <Link href="/firstpage" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">Finance</Link>
-                                <Link href="/development" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">Development</Link>
-                                <Link href="/international" className="px-4 py-3 text-left font-jost text-[#400505] hover:bg-[#400505] hover:text-white transition-all">International</Link>
+                                <Link href="/login"
+                                    className="font-jost uppercase text-[14px] text-left px-4 py-3 text-[#400505] hover:bg-[#400505] hover:text-white transition-all"
+                                >
+                                    Login
+                                </Link>
+                                <Link href="/signup" className="font-jost uppercase text-[14px] text-left px-4 py-3 text-[#400505] hover:bg-[#400505] hover:text-white transition-all">
+                                    Apply now
+                                </Link>
                             </>
 
                         ) : (

@@ -262,7 +262,7 @@ export default function Development() {
                         Interested in our other <br /> <span className="italic">finance services?</span>
                     </h1>
                     <div>
-                        <Link href="/finance" className="w-full sm:w-[256px] h-12 bg-[#F3E6CF] px-4 py-3 flex items-center justify-center gap-2 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase text-[#3B0D0D] hover:bg-[#e7d7bb] transition-colors">
+                        <Link href="/firstpage" className="w-full sm:w-[256px] h-12 bg-[#F3E6CF] px-4 py-3 flex items-center justify-center gap-2 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase text-[#3B0D0D] hover:bg-[#e7d7bb] transition-colors">
                             View Finance Page →
                         </Link> <br />
                         <Link href="/international" className="w-full sm:w-[256px] h-12 bg-[#F3E6CF] px-4 py-3 flex items-center justify-center gap-2 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase text-[#3B0D0D] hover:bg-[#e7d7bb] transition-colors">

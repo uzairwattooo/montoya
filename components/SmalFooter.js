@@ -42,8 +42,8 @@ export default function SmalFooter() {
 
                     <div className="text-center lg:text-right">
                         <Link
-                            href="https://montoyaroe.com"
-                            className="font-['Arial'] text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal uppercase text-[#44413B] hover:text-white/50"
+                            href="https://montoyaroe.com" target='__blank'
+                            className="font-['Arial'] coursor-pointer text-[14px] sm:text-[16px] font-normal leading-6 tracking-normal uppercase text-[#44413B] hover:text-white/50"
                         >
                             MONTOYAROE.COM
                         </Link>
