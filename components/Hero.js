@@ -30,30 +30,46 @@ const Hero = () => {
           </div>
           <div className="w-full lg:w-60 text-[#8C7B6B]">
 
-            <ul className="space-y-6 lg:space-y-2">
+            <ul className="space-y-6 lg:space-y-5">
 
-              <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <Link href="/firstpage">
-                  <span className="font-cormorant text-[20px] md:text-[24px]">01.</span>
-                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+              <li className="hover-accent cursor-pointer">
+                <Link
+                  href="/firstpage"
+                  className="flex gap-3 md:gap-4 items-center"
+                >
+                  <span className="font-cormorant text-[22px] md:text-[26px] font-medium">
+                    01.
+                  </span>
+
+                  <span className="font-cormorant text-[30px] md:text-[42px] italic leading-none font-medium">
                     Finance
                   </span>
                 </Link>
               </li>
-              <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <Link href="/development">
+              <li className="hover-accent cursor-pointer">
+                <Link
+                  href="/development"
+                  className="flex gap-3 md:gap-4 items-center"
+                >
+                  <span className="font-cormorant text-[22px] md:text-[26px] font-medium">
+                    02.
+                  </span>
 
-                  <span className="font-cormorant text-[20px] md:text-[24px]">02.</span>
-                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+                  <span className="font-cormorant text-[30px] md:text-[42px] italic leading-none font-medium">
                     Development
                   </span>
                 </Link>
               </li>
+              <li className="hover-accent cursor-pointer">
+                <Link
+                  href="/international"
+                  className="flex gap-3 md:gap-4 items-center"
+                >
+                  <span className="font-cormorant text-[22px] md:text-[26px] font-medium">
+                    03.
+                  </span>
 
-              <li className="flex gap-3 md:gap-4 hover-accent items-center cursor-pointer">
-                <Link href="/international">
-                  <span className="font-cormorant text-[20px] md:text-[24px]">03.</span>
-                  <span className="font-cormorant text-[28px] md:text-[40px] italic">
+                  <span className="font-cormorant text-[30px] md:text-[42px] italic leading-none font-medium">
                     International
                   </span>
                 </Link>
@@ -62,7 +78,6 @@ const Hero = () => {
             </ul>
 
           </div>
-
         </div>
       </section>
 

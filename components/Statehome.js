@@ -7,30 +7,33 @@ const cards = [
 ];
 
 const services = [
-    {
-        id: "01",
-        category: "FINANCE",
-        title: "Home & Development Loans",
-        description:
-            "Residential purchase, refinance, or property development financing structured around your goals.",
-        linkText: "EXPLORE FINANCE",
-    },
-    {
-        id: "02",
-        category: "PROJECTS",
-        title: "Development Partnership",
-        description:
-            "Joint ventures and partnership capital for developers bringing ambitious projects to life.",
-        linkText: "EXPLORE PARTNERSHIP",
-    },
-    {
-        id: "03",
-        category: "STRATEGY",
-        title: "International Development",
-        description:
-            "Cross-border financing and strategic advisory for projects operating at an international scale.",
-        linkText: "EXPLORE INTERNATIONAL",
-    }
+  {
+    id: "01",
+    category: "FINANCE",
+    title: "Home & Development Loans",
+    description:
+      "Residential purchase, refinance, or property development financing structured around your goals.",
+    linkText: "EXPLORE FINANCE",
+    href: "/firstpage",
+  },
+  {
+    id: "02",
+    category: "PROJECTS",
+    title: "Development Partnership",
+    description:
+      "Joint ventures and partnership capital for developers bringing ambitious projects to life.",
+    linkText: "EXPLORE PARTNERSHIP",
+    href: "/development",
+  },
+  {
+    id: "03",
+    category: "STRATEGY",
+    title: "International Development",
+    description:
+      "Cross-border financing and strategic advisory for projects operating at an international scale.",
+    linkText: "EXPLORE INTERNATIONAL",
+    href: "/international",
+  }
 ];
 
 const points = [
@@ -97,7 +100,7 @@ const Statehome = () => {
                             ${index !== 0 ? 'md:border-l' : ''}`}
                         >
 
-                            <div className="font-jost text-[12px] text-[#8C7B6B] mb-6 hover-accent uppercase cursor-pointer">
+                            <div className="font-jost text-[12px] text-[#6E5D4F] mb-6 hover-accent uppercase cursor-pointer">
                                 {service.id} — {service.category}
                             </div>
 
@@ -110,7 +113,7 @@ const Statehome = () => {
                             </p>
 
                             <Link
-                                href="#"
+                                href={service.href}
                                 className="w-31 h-10 opacity-100 font-jost text-[14px] font-normal leading-5 tracking-normal uppercase text-[#3B0D0D] flex items-center"
                             >
                                 {service.linkText} →
@@ -129,11 +132,11 @@ const Statehome = () => {
 
                     <div>
                         <div className="flex items-center gap-3">
-                            <div className="w-8.25 border-t-[0.4px] border-[#8C7B6B]"></div>
+                            <div className="w-8.25 border-t-[0.4px] border-[#6E5D4F]"></div>
 
-                            <p className="font-jost text-[14px] font-light leading-[100%] tracking-normal text-center uppercase text-[#8C7B6B]">
+                            <h2 className="font-jost text-[14px] font-light leading-[100%] tracking-normal text-center uppercase text-[#6E5D4F]">
                                 Our Philosophy
-                            </p>
+                            </h2>
                         </div>
 
                         <h2 className="font-cormorant text-[48px] font-medium italic leading-13.5 tracking-[-0.02em] text-[#F3E6CF]">
@@ -149,7 +152,7 @@ const Statehome = () => {
                                     <h3 className="w-61.5 h-5.5 font-jost text-[16px] font-normal leading-[100%] tracking-normal uppercase text-[#F3E6CF]">
                                         {point.title}
                                     </h3>
-                                    <p className="w-61.5 h-24.25 font-jost text-[16px] font-normal leading-6 tracking-normal text-[#797267]">
+                                    <p className="w-61.5 font-jost text-[16px] font-normal leading-6 text-[#6E5D4F]">
                                         {point.description}
                                     </p>
                                 </div>
