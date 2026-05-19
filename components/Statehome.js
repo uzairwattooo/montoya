@@ -128,7 +128,7 @@ const Statehome = () => {
 
             </section>
 
-            <section className="w-full bg-[#0A0A0A] py-24 px-6 md:px-12 lg:px-40 text-[#E5D5C5]">
+            <section className="w-full bg-[#0A0A0A] py-24 px-6 md:px-12 lg:px-40 text-[#B5A487]">
 
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -136,9 +136,9 @@ const Statehome = () => {
                         <div className="flex items-center gap-3">
                             <div className="w-8.25 border-t-[0.4px] border-[#6E5D4F]"></div>
 
-                            <h2 className="font-jost text-[14px] font-light leading-[100%] tracking-normal text-center uppercase text-[#6E5D4F]">
+                            <h3 className="font-jost text-[14px] font-light leading-[100%] tracking-normal text-center uppercase text-[#B5A487]">
                                 Our Philosophy
-                            </h2>
+                            </h3>
                         </div>
 
                         <h2 className="font-cormorant text-[48px] font-medium italic leading-13.5 tracking-[-0.02em] text-[#F3E6CF]">
@@ -154,7 +154,7 @@ const Statehome = () => {
                                     <h3 className="w-61.5 h-5.5 font-jost text-[16px] font-normal leading-[100%] tracking-normal uppercase text-[#F3E6CF]">
                                         {point.title}
                                     </h3>
-                                    <p className="w-61.5 font-jost text-[16px] font-normal leading-6 text-[#6E5D4F]">
+                                    <p className="w-61.5 font-jost text-[16px] font-normal leading-6 text-[#A99984]">
                                         {point.description}
                                     </p>
                                 </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-[#050505] pt-24 pb-12 px-6 md:px-12 lg:px-24 text-[#E5D5C5]">
+    <footer className="w-full bg-[#050505] pt-24 pb-12 px-6 md:px-12 lg:px-24 text-[#E0B194]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
           <div className="lg:col-span-6">
@@ -22,33 +22,33 @@ const Footer = () => {
           </div>
           <div className="lg:col-span-6 grid grid-cols-3 gap-10">
             <div>
-              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#9E998F] uppercase font-jost mb-6">
                 Services
               </p>
 
-              <ul className="space-y-2 text-[#8C7B6B]">
+              <ul className="space-y-2 text-[#A69A8C]">
                 <li><Link href="/firstpage" className="font-jost hover:text-[#E5D5C5]">Finance</Link></li>
                 <li><Link href="/development" className="font-jost hover:text-[#E5D5C5]">Development Partnership</Link></li>
                 <li><Link href="/international" className="font-jost hover:text-[#E5D5C5]">International Development</Link></li>
               </ul>
             </div>
             <div>
-              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#9E998F] uppercase font-jost mb-6">
                 Account
               </p>
 
-              <ul className="space-y-5 text-[#8C7B6B]">
+              <ul className="space-y-5 text-[#A69A8C]">
                 <li><Link href="/signup" className="font-jost hover:text-[#E5D5C5]">Sign Up</Link></li>
                 <li><Link href="/login" className="font-jost hover:text-[#E5D5C5]">Login</Link></li>
                 <li><Link href="/dashboard" className="font-jost hover:text-[#E5D5C5]">My Applications</Link></li>
               </ul>
             </div>
             <div>
-              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#9E998F] uppercase font-jost mb-6">
                 Legal
               </p>
 
-              <ul className="space-y-2 lg:space-y-5 md:space-y-1 text-[#8C7B6B]">
+              <ul className="space-y-2 lg:space-y-5 md:space-y-1 text-[#A69A8C]">
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">Privacy Policy</li>
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">Terms of Use</li>
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">GDPR Compliance</li>
