@@ -28,10 +28,8 @@ const Hero = () => {
               Shaping the future.
             </h1>
           </div>
-          <div className="w-full lg:w-60 text-[#8C7B6B]">
-
+          <div className="w-full lg:w-60 text-gray-800">
             <ul className="space-y-6 lg:space-y-5">
-
               <li className="hover-accent cursor-pointer">
                 <Link
                   href="/firstpage"
@@ -40,7 +38,6 @@ const Hero = () => {
                   <span className="font-cormorant text-[22px] md:text-[26px] font-medium">
                     01.
                   </span>
-
                   <span className="font-cormorant text-[30px] md:text-[42px] italic leading-none font-medium">
                     Finance
                   </span>

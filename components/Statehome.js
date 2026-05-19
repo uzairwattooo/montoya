@@ -57,6 +57,8 @@ const points = [
 const Statehome = () => {
     return (
         <>
+            <main id="main-content">
+
             <section className="w-full bg-[#2D0A0A] py-12 px-6">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
                     {cards.map((card, index) => (
@@ -179,6 +181,7 @@ const Statehome = () => {
 
                 </div>
             </section>
+            </main>
         </>
     );
 };

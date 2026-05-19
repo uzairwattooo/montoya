@@ -22,9 +22,9 @@ const Footer = () => {
           </div>
           <div className="lg:col-span-6 grid grid-cols-3 gap-10">
             <div>
-              <h4 className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
                 Services
-              </h4>
+              </p>
 
               <ul className="space-y-2 text-[#8C7B6B]">
                 <li><Link href="/firstpage" className="font-jost hover:text-[#E5D5C5]">Finance</Link></li>
@@ -33,9 +33,9 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
                 Account
-              </h4>
+              </p>
 
               <ul className="space-y-5 text-[#8C7B6B]">
                 <li><Link href="/signup" className="font-jost hover:text-[#E5D5C5]">Sign Up</Link></li>
@@ -44,9 +44,9 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-[16px] text-[#797267] uppercase font-jost mb-6">
+              <p className="text-[16px] text-[#797267] uppercase font-jost mb-6">
                 Legal
-              </h4>
+              </p>
 
               <ul className="space-y-2 lg:space-y-5 md:space-y-1 text-[#8C7B6B]">
                 <li className="font-jost hover:text-[#E5D5C5] cursor-pointer">Privacy Policy</li>

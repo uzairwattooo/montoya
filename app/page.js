@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <Statehome/>
+      <Statehome id="main-content"/>
       <Footer/>
     </>
   )
