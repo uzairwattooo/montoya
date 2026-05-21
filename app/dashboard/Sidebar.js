@@ -2,17 +2,34 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import DashboardIcon from "@/public/icons/material-symbols-light_dashboard-outline.svg";
-import SettingIcon from "@/public/icons/settings.svg";
-import FileIcon from "@/public/icons/ph_files-light.svg";
-import SignoutIcon from "@/public/icons/signout.svg";
+import DashboardIcon from "../../public/icons/material-symbols-light_dashboard-outline.svg";
+import SettingIcon from "../../public/icons/settings.svg";
+import FileIcon from "../../public/icons/ph_files-light.svg";
+import SignoutIcon from "../../public/icons/signout.svg";
+import { authClient } from "../../lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({
     activePage,
     setActivePage,
     sidebarOpen,
-    setSidebarOpen,
+    setSidebarOpen,userName
 }) => {
+    const router = useRouter(); 
+    const handleSignout = async () => {
+    await authClient.signOut();
+    router.push("/login")
+    }
+    const capitalizeName = (name) => {
+  return name
+    ?.split(" ")
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+    )
+    .join(" ");
+};
     return (
         <>
             {sidebarOpen && (
@@ -58,7 +75,7 @@ const Sidebar = ({
 
                     <div className="px-6 md:px-8 py-6">
                         <h4 className="font-jost text-[18px] font-normal text-[#F3E6CF]">
-                            James Anderson
+                            {capitalizeName(userName)}
                         </h4>
                         <span className="font-jost text-[14px] font-light uppercase tracking-wider text-[#977F7F] mt-1.5 block">
                             Client Portal
@@ -98,7 +115,7 @@ const Sidebar = ({
                     </nav>
                 </div>
                 <div className="p-6 md:p-8 text-center">
-                    <button className="flex items-center gap-3 px-4 py-3 border border-[#E9D6B2]/30 text-[#7C5E5C] hover:text-[#F3E6CF]">
+                    <button onClick={handleSignout} className="flex items-center gap-3 px-4 py-3 border border-[#E9D6B2]/30 text-[#7C5E5C] hover:text-[#F3E6CF]">
                         <SignoutIcon />
                         Sign Out
                     </button>

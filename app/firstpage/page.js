@@ -1,7 +1,12 @@
 "use client"
-import SmalFooter from '@/components/SmalFooter';
+
+import SmalFooter from "../../components/SmalFooter";
 import { Play, Check } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
+import { authClient } from "../../lib/auth-client";
+
 const items = [
     {
         title: "2 PRODUCTS",
@@ -19,12 +24,269 @@ const items = [
 
 const Firstpage = () => {
     const [selected, setSelected] = useState('home');
-
-
     const inputClasses = "w-full bg-[#FFF4E0] border-none rounded-lg mt-2.5 p-4 font-jost text-[14px] font-normal leading-[100%] tracking-[0] text-[#ACA79D] placeholder:text-[#ACA79D]/50 focus:ring-1 focus:ring-[#3D1A1A]/20 outline-none transition-all";
     const labelClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] uppercase text-[#977F7F] mb-2";
     const sectionTitleClasses = "font-cormorant text-[24px] font-[500] leading-[100%] tracking-[0] text-[#3B0D0D] mb-8";
     const sectionHeaderClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] text-[#8C7B6B] uppercase mb-2";
+    const [homeLoanForm, setHomeLoanForm] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+        residentialAddress: "",
+        employmentStatus: "",
+        employerName: "",
+        employerContactNumber: "",
+        monthlyIncome: "",
+        requestedLoanAmount: "",
+        loanPurpose: "",
+        estimatedPropertyValue: "",
+        documents: [],
+        additionalComments: "",
+        creditCheckConsent: false,
+    });
+    const [developmentLoanForm, setDevelopmentLoanForm] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+
+        siteAddress: "",
+        developmentType: "",
+        currentZoning: "",
+
+        purchasePrice: "",
+        currentDebt: "",
+        expectedConstructionCosts: "",
+        expectedTotalSalesPrice: "",
+
+        documents: [],
+
+        projectDescription: "",
+        consent: false,
+    });
+
+    const router = useRouter();
+    const uploadDocuments = async (files, userId, type) => {
+        const uploadedFiles = [];
+
+        for (const file of files) {
+            const filePath = `${userId}/${type}/${Date.now()}-${file.name}`;
+
+            const { error } = await supabase.storage
+                .from("documents")
+                .upload(filePath, file);
+
+            if (error) {
+                throw error;
+            }
+            const { data } = supabase.storage
+                .from("documents")
+                .getPublicUrl(filePath);
+
+            uploadedFiles.push({
+                name: file.name,
+                path: filePath,
+                url: data.publicUrl,
+                size: file.size,
+            });
+        }
+        return uploadedFiles;
+    };
+    const handleApply = async (e) => {
+        e.preventDefault();
+
+        if (!homeLoanForm.fullName) {
+            alert("Full name is required");
+            return;
+        }
+        if (!homeLoanForm.email) {
+            alert("Email is required");
+            return;
+        }
+        if (!homeLoanForm.phone) {
+            alert("Phone number is required");
+            return;
+        }
+        if (!homeLoanForm.residentialAddress) {
+            alert("Residential address is required");
+            return;
+        }
+        if (!homeLoanForm.employmentStatus) {
+            alert("Employment status is required");
+            return;
+        }
+        if (!homeLoanForm.employerName) {
+            alert("Employer name is required");
+            return;
+        }
+        if (!homeLoanForm.monthlyIncome) {
+            alert("Monthly income is required");
+            return;
+        }
+        if (!homeLoanForm.requestedLoanAmount) {
+            alert("Requested loan amount is required");
+            return;
+        }
+        if (!homeLoanForm.loanPurpose) {
+            alert("Loan purpose is required");
+            return;
+        }
+        if (!homeLoanForm.estimatedPropertyValue) {
+            alert("Estimated property value is required");
+            return;
+        }
+        if (homeLoanForm.documents.length === 0) {
+            alert("Please upload at least one document");
+            return;
+        }
+        if (!homeLoanForm.creditCheckConsent) {
+            alert("You must consent before submitting");
+            return;
+        }
+        const session = await authClient.getSession();
+        const user = session?.data?.user;
+        if (!user) {
+            router.push(`/login?redirect=${window.location.pathname}`);
+            return;
+        }
+        const uploadedDocuments = await uploadDocuments(
+            homeLoanForm.documents,
+            user.id,
+            "home-loan"
+        );
+        const { error } = await supabase.from("home_loan_applications").insert({
+            user_id: user.id,
+            full_name: homeLoanForm.fullName,
+            email: homeLoanForm.email,
+            phone: homeLoanForm.phone,
+            residential_address: homeLoanForm.residentialAddress,
+            employment_status: homeLoanForm.employmentStatus,
+            employer_name: homeLoanForm.employerName,
+            employer_contact_number: homeLoanForm.employerContactNumber,
+            monthly_income: homeLoanForm.monthlyIncome,
+            requested_loan_amount: homeLoanForm.requestedLoanAmount,
+            loan_purpose: homeLoanForm.loanPurpose,
+            estimated_property_value: homeLoanForm.estimatedPropertyValue,
+            documents: uploadedDocuments,
+            additional_comments: homeLoanForm.additionalComments,
+            credit_check_consent: homeLoanForm.creditCheckConsent,
+            status: "pending",
+        });
+
+        if (error) {
+            console.log(error);
+            alert(error.message);
+            return;
+        }
+
+        alert("Application submitted successfully");
+        router.push("/dashboard");
+    };
+    const handleDevelopmentApply = async (e) => {
+        if (!developmentLoanForm.fullName) {
+            alert("Full name is required");
+            return;
+        }
+
+        if (!developmentLoanForm.email) {
+            alert("Email is required");
+            return;
+        }
+
+        if (!developmentLoanForm.phone) {
+            alert("Phone number is required");
+            return;
+        }
+
+        if (!developmentLoanForm.siteAddress) {
+            alert("Site address is required");
+            return;
+        }
+
+        if (!developmentLoanForm.developmentType) {
+            alert("Development type is required");
+            return;
+        }
+
+        if (!developmentLoanForm.currentZoning) {
+            alert("Current zoning is required");
+            return;
+        }
+
+        if (!developmentLoanForm.purchasePrice) {
+            alert("Purchase price is required");
+            return;
+        }
+
+        if (!developmentLoanForm.expectedConstructionCosts) {
+            alert("Expected construction costs are required");
+            return;
+        }
+
+        if (!developmentLoanForm.expectedTotalSalesPrice) {
+            alert("Expected total sales price is required");
+            return;
+        }
+
+        if (developmentLoanForm.documents.length === 0) {
+            alert("Please upload at least one document");
+            return;
+        }
+
+        if (!developmentLoanForm.consent) {
+            alert("You must agree before submitting");
+            return;
+        }
+        e.preventDefault();
+
+        const session = await authClient.getSession();
+        const user = session?.data?.user;
+
+        if (!user) {
+            router.push(`/login?redirect=${window.location.pathname}`);
+            return;
+        }
+        const uploadedDocuments = await uploadDocuments(
+            developmentLoanForm.documents,
+            user.id,
+            "development-loan"
+        );
+        const { error } = await supabase
+            .from("development_loan_applications")
+            .insert({
+                user_id: user.id,
+
+                full_name: developmentLoanForm.fullName,
+                email: developmentLoanForm.email,
+                phone: developmentLoanForm.phone,
+
+                site_address: developmentLoanForm.siteAddress,
+                development_type: developmentLoanForm.developmentType,
+                current_zoning: developmentLoanForm.currentZoning,
+
+                purchase_price: developmentLoanForm.purchasePrice,
+                current_debt: developmentLoanForm.currentDebt,
+                expected_construction_costs:
+                    developmentLoanForm.expectedConstructionCosts,
+                expected_total_sales_price:
+                    developmentLoanForm.expectedTotalSalesPrice,
+
+                documents: uploadedDocuments,
+
+                project_description: developmentLoanForm.projectDescription,
+                consent: developmentLoanForm.consent,
+
+                status: "pending",
+            });
+
+        if (error) {
+            console.log(error);
+            alert(error.message);
+            return;
+        }
+
+        alert("Development loan application submitted successfully");
+        router.push("/dashboard");
+    };
     return (
         <>
             <hr className='text-[#E8D5B0]' />
@@ -146,84 +408,227 @@ const Firstpage = () => {
                         </div>
 
                         <main className="bg-white mb-10 shadow-sm p-8 md:p-16 lg:p-16 text-[#3D1A1A] w-full max-w-299.5 mx-auto">
-                            <form className="space-y-16">
+                            <form onSubmit={handleApply} className="space-y-16">
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 01</p>
                                     <h2 className={sectionTitleClasses}>Personal Information</h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="md:col-span-2">
                                             <label className={labelClasses}>Full Name *</label>
-                                            <input type="text" placeholder="e.g. James Anderson" className={inputClasses} />
+                                            <input required
+                                                type="text"
+                                                value={homeLoanForm.fullName}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({ ...homeLoanForm, fullName: e.target.value })
+                                                }
+                                                placeholder="e.g. James Anderson"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Email Address *</label>
-                                            <input type="email" placeholder="james@example.com" className={inputClasses} />
+                                            <input required
+                                                type="email"
+                                                value={homeLoanForm.email}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({ ...homeLoanForm, email: e.target.value })
+                                                }
+                                                placeholder="james@example.com"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Phone Number *</label>
-                                            <input type="tel" placeholder="+61 400 000 000" className={inputClasses} />
+                                            <input required
+                                                type="tel"
+                                                value={homeLoanForm.phone}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({ ...homeLoanForm, phone: e.target.value })
+                                                }
+                                                placeholder="+61 400 000 000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div className="md:col-span-2">
                                             <label className={labelClasses}>Residential Address *</label>
-                                            <input type="text" placeholder="Full street address including suburb and postcode" className={inputClasses} />
+                                            <input required
+                                                type="text"
+                                                value={homeLoanForm.residentialAddress}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        residentialAddress: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Full street address including suburb and postcode"
+                                                className={inputClasses}
+                                            />
                                         </div>
                                     </div>
                                 </section>
 
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 02</p>
                                     <h2 className={sectionTitleClasses}>Employment & Income</h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label className={labelClasses}>Employment Status *</label>
-                                            <select className={`${inputClasses} text-black/80`}>
-                                                <option>Select status</option>
+                                            <select
+                                                value={homeLoanForm.employmentStatus}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        employmentStatus: e.target.value,
+                                                    })
+                                                }
+                                                className={`${inputClasses} text-black/80`}
+                                            >
+                                                <option value="">Select status</option>
+                                                <option value="employed">Employed</option>
+                                                <option value="self_employed">Self Employed</option>
+                                                <option value="business_owner">Business Owner</option>
+                                                <option value="unemployed">Unemployed</option>
+                                                <option value="retired">Retired</option>
                                             </select>
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Employer Name *</label>
-                                            <input type="text" placeholder="Company or business" className={inputClasses} />
+                                            <input required
+                                                type="text"
+                                                value={homeLoanForm.employerName}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        employerName: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Company or business"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Employer Contact Number</label>
-                                            <input type="tel" placeholder="+61 000 000 000" className={inputClasses} />
+                                            <input required
+                                                type="tel"
+                                                value={homeLoanForm.employerContactNumber}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        employerContactNumber: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="+61 000 000 000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Monthly Income (AUD) *</label>
-                                            <input type="text" placeholder="e.g. 8500" className={inputClasses} />
+                                            <input required
+                                                type="number"
+                                                value={homeLoanForm.monthlyIncome}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        monthlyIncome: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 8500"
+                                                className={inputClasses}
+                                            />
                                         </div>
                                     </div>
                                 </section>
 
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 03</p>
                                     <h2 className={sectionTitleClasses}>Loan Details</h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label className={labelClasses}>Requested Loan Amount (AUD) *</label>
-                                            <input type="text" placeholder="e.g. 650000" className={inputClasses} />
+                                            <input required
+                                                type="number"
+                                                value={homeLoanForm.requestedLoanAmount}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        requestedLoanAmount: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 650000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
                                             <label className={labelClasses}>Purpose of Loan *</label>
-                                            <select className={`${inputClasses} text-black/80`}>
-                                                <option>Select status</option>
+                                            <select
+                                                value={homeLoanForm.loanPurpose}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        loanPurpose: e.target.value,
+                                                    })
+                                                }
+                                                className={`${inputClasses} text-black/80`}
+                                            >
+                                                <option value="">Select purpose</option>
+                                                <option value="first_home">First Home</option>
+                                                <option value="investment_property">Investment Property</option>
+                                                <option value="refinance">Refinance</option>
+                                                <option value="construction">Construction</option>
                                             </select>
                                         </div>
+
                                         <div className="md:col-span-2">
                                             <label className={labelClasses}>Estimated Property Value (AUD) *</label>
-                                            <input type="text" placeholder="e.g. 900000" className={inputClasses} />
+                                            <input required
+                                                type="number"
+                                                value={homeLoanForm.estimatedPropertyValue}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        estimatedPropertyValue: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 900000"
+                                                className={inputClasses}
+                                            />
                                         </div>
                                     </div>
                                 </section>
+
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 04</p>
                                     <h2 className={sectionTitleClasses}>Supporting Documents</h2>
 
                                     <label className="block border border-dashed border-[#3D1A1A]/10 bg-[#FAF6EF] p-12 text-center cursor-pointer">
-                                        <input type="file" className="hidden" multiple />
+                                        <input required
+                                            type="file"
+                                            className="hidden"
+                                            multiple
+                                            onChange={(e) =>
+                                                setHomeLoanForm({
+                                                    ...homeLoanForm,
+                                                    documents: Array.from(e.target.files),
+                                                })
+                                            }
+                                        />
+
                                         <svg
                                             className="mx-auto mb-4 opacity-30"
                                             width="28"
@@ -238,44 +643,84 @@ const Firstpage = () => {
                                             <path d="M12 16V4" />
                                             <path d="M8 8l4-4 4 4" />
                                         </svg>
+
                                         <p className="font-jost text-[14px] font-normal text-[#8C7B6B] uppercase mb-3">
                                             Upload Documents
                                         </p>
+
                                         <p className="font-jost text-[14px] font-light text-[#8C7B6B] uppercase">
-                                            Proof of Income · ID · Bank Statements — PDF, JPG, <br /> PNG accepted · Max 20MB each
+                                            Proof of Income · ID · Bank Statements — PDF, JPG, <br /> PNG accepted ·
+                                            Max 20MB each
                                         </p>
                                     </label>
+
+                                    {homeLoanForm.documents.length > 0 && (
+                                        <div className="mt-4 space-y-2">
+                                            {homeLoanForm.documents.map((file, index) => (
+                                                <p key={index} className="font-jost text-[14px] text-[#3B0D0D]">
+                                                    {file.name}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
                                 </section>
+
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 05</p>
                                     <h2 className={sectionTitleClasses}>Final Details</h2>
+
                                     <div className="space-y-6">
                                         <div>
                                             <label className={labelClasses}>Additional Comments</label>
-                                            <textarea rows={8} className={`${inputClasses} mt-3 rounded-lg`} placeholder="Any additional context about your application or situation..."></textarea>
+                                            <textarea
+                                                rows={8}
+                                                value={homeLoanForm.additionalComments}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        additionalComments: e.target.value,
+                                                    })
+                                                }
+                                                className={`${inputClasses} mt-3 rounded-lg`}
+                                                placeholder="Any additional context about your application or situation..."
+                                            />
                                         </div>
-                                        <label className="flex items-start gap-4 cursor-pointer">
 
-                                            <input
+                                        <label className="flex items-start gap-4 cursor-pointer">
+                                            <input required
                                                 type="checkbox"
-                                                className=" mt-1 min-w-11 h-10 appearance-none border border-[#E9D6B2] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] relative checked:after:content-['✓'] checked:after:text-white checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+                                                checked={homeLoanForm.creditCheckConsent}
+                                                onChange={(e) =>
+                                                    setHomeLoanForm({
+                                                        ...homeLoanForm,
+                                                        creditCheckConsent: e.target.checked,
+                                                    })
+                                                }
+                                                className="mt-1 min-w-11 h-10 appearance-none border border-[#E9D6B2] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] relative checked:after:content-['✓'] checked:after:text-white checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
                                             />
 
                                             <span className="font-jost text-[14px] sm:text-[16px] font-light leading-6 tracking-normal uppercase text-[#B4B4B4]">
-                                                I consent to Montoya Roe conducting a credit check as part of my loan application.
-                                                I understand this will be handled in accordance with the Australian Privacy Act and GDPR guidelines.
+                                                I consent to Montoya Roe conducting a credit check as part of my loan
+                                                application. I understand this will be handled in accordance with the
+                                                Australian Privacy Act and GDPR guidelines.
                                             </span>
-
                                         </label>
                                     </div>
                                 </section>
-                                <div className="flex flex-col md:flex-row  gap-18 pt-10">
-                                    <button className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors">
+
+                                <div className="flex flex-col md:flex-row gap-18 pt-10">
+                                    <button
+                                        type="submit"
+                                        className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors"
+                                    >
                                         Submit Application
                                     </button>
+
                                     <p className="font-jost text-[14px] font-light leading-5 tracking-normal uppercase text-[#B2A79D] text-start">
-                                        Protected by SSL encryption. <br /> Your data is never shared with third parties.
+                                        Protected by SSL encryption. <br /> Your data is never shared with third
+                                        parties.
                                     </p>
                                 </div>
                             </form>
@@ -301,83 +746,275 @@ const Firstpage = () => {
                         </div>
 
                         <main className="bg-white mb-10 shadow-sm p-8 md:p-16 lg:p-16 text-[#3D1A1A] w-full max-w-299.5 mx-auto">
-                            <form className="space-y-16">
+                            <form onSubmit={handleDevelopmentApply} className="space-y-16">
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 01</p>
-                                    <h2 className={sectionTitleClasses}>Personal Information</h2>
+
+                                    <h2 className={sectionTitleClasses}>
+                                        Personal Information
+                                    </h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                                         <div className="md:col-span-2">
-                                            <label className={labelClasses}>Full Name *</label>
-                                            <input type="password" placeholder="e.g. James Anderson" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Full Name *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="text"
+                                                value={developmentLoanForm.fullName}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        fullName: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. James Anderson"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Email Address *</label>
-                                            <input type="email" placeholder="james@example.com" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Email Address *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="email"
+                                                value={developmentLoanForm.email}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        email: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="james@example.com"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Phone Number *</label>
-                                            <input type="tel" placeholder="+61 400 000 000" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Phone Number *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="tel"
+                                                value={developmentLoanForm.phone}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        phone: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="+61 400 000 000"
+                                                className={inputClasses}
+                                            />
                                         </div>
 
                                     </div>
                                 </section>
 
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 02</p>
-                                    <h2 className={sectionTitleClasses}>Site & Development Details</h2>
+
+                                    <h2 className={sectionTitleClasses}>
+                                        Site & Development Details
+                                    </h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                                         <div className="md:col-span-2">
-                                            <label className={labelClasses}>Site Address *</label>
-                                            <input type="text" placeholder="Full address of the development site" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Site Address *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="text"
+                                                value={developmentLoanForm.siteAddress}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        siteAddress: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="Full address of the development site"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Development Type *</label>
-                                            <select className={`${inputClasses} text-black/80`}>
-                                                <option>Select status</option>
+                                            <label className={labelClasses}>
+                                                Development Type *
+                                            </label>
+
+                                            <select
+                                                value={developmentLoanForm.developmentType}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        developmentType: e.target.value,
+                                                    })
+                                                }
+                                                className={`${inputClasses} text-black/80`}
+                                            >
+                                                <option value="">Select status</option>
+                                                <option value="residential">Residential</option>
+                                                <option value="commercial">Commercial</option>
+                                                <option value="mixed_use">Mixed Use</option>
+                                                <option value="industrial">Industrial</option>
                                             </select>
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Current Zoning</label>
-                                            <input type="text" placeholder="e.g. R20, R60, R80 " className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Current Zoning
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="text"
+                                                value={developmentLoanForm.currentZoning}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        currentZoning: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. R20, R60, R80"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                     </div>
                                 </section>
 
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 03</p>
-                                    <h2 className={sectionTitleClasses}>Financial Details</h2>
+
+                                    <h2 className={sectionTitleClasses}>
+                                        Financial Details
+                                    </h2>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                                         <div>
-                                            <label className={labelClasses}>Purchase Price / Current Value (AUD) *
+                                            <label className={labelClasses}>
+                                                Purchase Price / Current Value (AUD) *
                                             </label>
-                                            <input type="number" placeholder="e.g. 1200000" className={inputClasses} />
+
+                                            <input
+                                                required
+                                                type="number"
+                                                value={developmentLoanForm.purchasePrice}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        purchasePrice: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 1200000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Current Debt on Property (AUD)
+                                            <label className={labelClasses}>
+                                                Current Debt on Property (AUD)
                                             </label>
-                                            <input type="number" placeholder="e.g. 400000" className={inputClasses} />
+
+                                            <input
+                                                required
+                                                type="number"
+                                                value={developmentLoanForm.currentDebt}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        currentDebt: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 400000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Expected Construction Costs (AUD) *</label>
-                                            <input type="number" placeholder="e.g. 850000" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Expected Construction Costs (AUD) *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="number"
+                                                value={developmentLoanForm.expectedConstructionCosts}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        expectedConstructionCosts: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 850000"
+                                                className={inputClasses}
+                                            />
                                         </div>
+
                                         <div>
-                                            <label className={labelClasses}>Expected Total Sales Price (AUD) *</label>
-                                            <input type="number" placeholder="e.g. 2800000" className={inputClasses} />
+                                            <label className={labelClasses}>
+                                                Expected Total Sales Price (AUD) *
+                                            </label>
+
+                                            <input
+                                                required
+                                                type="number"
+                                                value={developmentLoanForm.expectedTotalSalesPrice}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        expectedTotalSalesPrice: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. 2800000"
+                                                className={inputClasses}
+                                            />
                                         </div>
 
                                     </div>
                                 </section>
+
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 04</p>
-                                    <h2 className={sectionTitleClasses}>Supporting Documents</h2>
+
+                                    <h2 className={sectionTitleClasses}>
+                                        Supporting Documents
+                                    </h2>
 
                                     <label className="block border border-dashed border-[#3D1A1A]/10 bg-[#FAF6EF] p-12 text-center cursor-pointer">
-                                        <input type="file" className="hidden" multiple />
+
+                                        <input
+                                            required
+                                            type="file"
+                                            className="hidden"
+                                            multiple
+                                            onChange={(e) =>
+                                                setDevelopmentLoanForm({
+                                                    ...developmentLoanForm,
+                                                    documents: Array.from(e.target.files),
+                                                })
+                                            }
+                                        />
+
                                         <svg
                                             className="mx-auto mb-4 opacity-30"
                                             width="28"
@@ -392,46 +1029,103 @@ const Firstpage = () => {
                                             <path d="M12 16V4" />
                                             <path d="M8 8l4-4 4 4" />
                                         </svg>
+
                                         <p className="font-jost text-[14px] font-normal text-[#8C7B6B] uppercase mb-3">
                                             Upload Documents
                                         </p>
+
                                         <p className="font-jost text-[14px] font-light text-[#8C7B6B] uppercase">
-                                            Proof of Income · ID · Bank Statements — PDF, JPG, <br /> PNG accepted · Max 20MB each
+                                            Proof of Income · ID · Bank Statements — PDF, JPG,
+                                            <br />
+                                            PNG accepted · Max 20MB each
                                         </p>
                                     </label>
+                                    {developmentLoanForm.documents.length > 0 && (
+                                        <div className="mt-4 space-y-2">
+                                            {developmentLoanForm.documents.map((file, index) => (
+                                                <p key={index} className="font-jost text-[14px] text-[#3B0D0D]">
+                                                    {file.name}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
+
+
                                 </section>
+
                                 <hr className="border-[#3D1A1A]/10" />
+
                                 <section>
                                     <p className={sectionHeaderClasses}>Section 05</p>
-                                    <h2 className={sectionTitleClasses}>Additional Information</h2>
+
+                                    <h2 className={sectionTitleClasses}>
+                                        Additional Information
+                                    </h2>
+
                                     <div className="space-y-6">
+
                                         <div>
-                                            <label className={labelClasses}>Tell us about your project</label>
-                                            <textarea rows={8} className={`${inputClasses} mt-3 rounded-lg`} placeholder="Describe the project in your own words - timeline, expected outcomes, any existing approvals or challenges, and what you’re looking for in a partner..."></textarea>
+                                            <label className={labelClasses}>
+                                                Tell us about your project
+                                            </label>
+
+                                            <textarea
+                                                rows={8}
+                                                value={developmentLoanForm.projectDescription}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        projectDescription: e.target.value,
+                                                    })
+                                                }
+                                                className={`${inputClasses} mt-3 rounded-lg`}
+                                                placeholder="Describe the project in your own words..."
+                                            />
                                         </div>
+
                                         <label className="flex items-start gap-4 cursor-pointer">
 
                                             <input
+                                                required
                                                 type="checkbox"
+                                                checked={developmentLoanForm.consent}
+                                                onChange={(e) =>
+                                                    setDevelopmentLoanForm({
+                                                        ...developmentLoanForm,
+                                                        consent: e.target.checked,
+                                                    })
+                                                }
                                                 className=" mt-1 min-w-11 h-10 appearance-none border border-[#E9D6B2] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] relative checked:after:content-['✓'] checked:after:text-white checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
                                             />
 
                                             <span className="font-jost text-[14px] sm:text-[16px] font-light leading-6 tracking-normal uppercase text-[#B4B4B4]">
-                                                I confirm that the information provided is accurate to the best of my knowledge, and I consent to Montoya Roe reviewing and assessing my application in accordance with the Australian Privacy Act and GDPR guidelines.
-
+                                                I confirm that the information provided is accurate to
+                                                the best of my knowledge, and I consent to Montoya Roe
+                                                reviewing and assessing my application.
                                             </span>
 
                                         </label>
+
                                     </div>
                                 </section>
-                                <div className="flex flex-col md:flex-row  gap-18 pt-10">
-                                    <button className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors">
+
+                                <div className="flex flex-col md:flex-row gap-18 pt-10">
+
+                                    <button
+                                        type="submit"
+                                        className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors"
+                                    >
                                         Submit Application
                                     </button>
+
                                     <p className="font-jost text-[14px] font-light leading-5 tracking-normal uppercase text-[#B2A79D] text-start">
-                                        Protected by SSL encryption. <br /> Your data is never shared with third parties.
+                                        Protected by SSL encryption.
+                                        <br />
+                                        Your data is never shared with third parties.
                                     </p>
+
                                 </div>
+
                             </form>
                         </main>
                     </div>

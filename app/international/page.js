@@ -1,6 +1,12 @@
-import SmalFooter from "@/components/SmalFooter";
+"use client"
+import SmalFooter from "../../components/SmalFooter";
 import { Check, Play } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
+import { authClient } from "../../lib/auth-client";
+import { useState } from "react";
+
 
 export default function International() {
     const regions = [
@@ -14,6 +20,115 @@ export default function International() {
     const labelClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] uppercase text-[#977F7F] mb-2";
     const sectionTitleClasses = "font-cormorant text-[24px] font-[500] leading-[100%] tracking-[0] text-[#3B0D0D] mb-8";
     const sectionHeaderClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] text-[#8C7B6B] uppercase mb-2";
+    const [internationalDevelopmentForm, setInternationalDevelopmentForm] =
+        useState({
+            fullName: "",
+            email: "",
+            phone: "",
+            organizationName: "",
+            rolePosition: "",
+            primaryCountry: "",
+            additionalCountries: "",
+            projectLocation: "",
+            projectScale: "",
+            estimatedProjectValue: "",
+            projectType: "",
+            projectTimeline: "",
+            internationalPartners: "",
+            projectDescription: "",
+            documents: [],
+        });
+    const router = useRouter();
+    const uploadDocuments = async (files, userId, type) => {
+        const uploadedFiles = [];
+        for (const file of files) {
+            const filePath = `${userId}/${type}/${Date.now()}-${file.name}`;
+            const { error } = await supabase.storage
+                .from("documents")
+                .upload(filePath, file);
+            if (error) {
+                throw error;
+            }
+            const { data } = supabase.storage
+                .from("documents")
+                .getPublicUrl(filePath);
+            uploadedFiles.push({
+                name: file.name,
+                path: filePath,
+                url: data.publicUrl,
+                size: file.size,
+            });
+        }
+        return uploadedFiles;
+    };
+    const handleInternationalDevelopmentApply = async (e) => {
+        e.preventDefault();
+        const session = await authClient.getSession();
+        const user = session?.data?.user;
+        if (!user) {
+            router.push(`/login?redirect=${window.location.pathname}`);
+            return;
+        }
+        if (!internationalDevelopmentForm.fullName)
+            return alert("Full name is required");
+        if (!internationalDevelopmentForm.email)
+            return alert("Email is required");
+        if (!internationalDevelopmentForm.phone)
+            return alert("Phone number is required");
+        if (!internationalDevelopmentForm.primaryCountry)
+            return alert("Primary country is required");
+        if (!internationalDevelopmentForm.projectScale)
+            return alert("Project scale is required");
+        if (!internationalDevelopmentForm.projectType)
+            return alert("Project type is required");
+        if (!internationalDevelopmentForm.projectDescription)
+            return alert("Project description is required");
+        if (internationalDevelopmentForm.documents.length === 0)
+            return alert("Please upload documents");
+        const uploadedDocuments = await uploadDocuments(
+            internationalDevelopmentForm.documents,
+            user.id,
+            "international-development"
+        );
+        const { error } = await supabase
+            .from("international_development_applications")
+            .insert({
+                user_id: user.id,
+                full_name: internationalDevelopmentForm.fullName,
+                email: internationalDevelopmentForm.email,
+                phone: internationalDevelopmentForm.phone,
+                organization_name:
+                    internationalDevelopmentForm.organizationName,
+                role_position: internationalDevelopmentForm.rolePosition,
+                primary_country:
+                    internationalDevelopmentForm.primaryCountry,
+                additional_countries:
+                    internationalDevelopmentForm.additionalCountries,
+                project_location:
+                    internationalDevelopmentForm.projectLocation,
+                project_scale:
+                    internationalDevelopmentForm.projectScale,
+                estimated_project_value:
+                    internationalDevelopmentForm.estimatedProjectValue,
+                project_type:
+                    internationalDevelopmentForm.projectType,
+                project_timeline:
+                    internationalDevelopmentForm.projectTimeline,
+                international_partners:
+                    internationalDevelopmentForm.internationalPartners,
+                project_description:
+                    internationalDevelopmentForm.projectDescription,
+                documents: uploadedDocuments,
+                status: "pending",
+            });
+        if (error) {
+            console.log(error);
+            alert(error.message);
+            return;
+        }
+        alert("Application submitted successfully");
+        router.push("/dashboard");
+    };
     return (
         <>
             <section className="bg-[#F3E6CF] py-12 md:py-20">
@@ -114,7 +229,7 @@ export default function International() {
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
 
                             <h2 className="font-cormorant italic text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-medium leading-tight md:leading-17.5 text-[#F3E6CF]">
-                                Development Partnership Application
+                                International Development Application
                             </h2>
 
                             <p className="font-jost text-[14px] sm:text-[16px] md:text-[20px] font-light leading-normal md:leading-7.5 tracking-normal uppercase text-[#93776B]">
@@ -126,106 +241,358 @@ export default function International() {
                 </div>
 
                 <main className="bg-white mb-10 shadow-sm p-8 md:p-16 lg:p-16 text-[#3D1A1A] w-full max-w-299.5 mx-auto">
-                    <form className="space-y-16">
+                    <form onSubmit={handleInternationalDevelopmentApply} className="space-y-16">
+
                         <section>
                             <p className={sectionHeaderClasses}>Section 01</p>
-                            <h2 className={sectionTitleClasses}>Applicant Information</h2>
+
+                            <h2 className={sectionTitleClasses}>
+                                Applicant Information
+                            </h2>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="md:col-span-2">
-                                    <label className={labelClasses}>Full Name *</label>
-                                    <input type="password" placeholder="e.g. James Anderson" className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Email Address *</label>
-                                    <input type="email" placeholder="james@example.com" className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Phone Number *</label>
-                                    <input type="tel" placeholder="+61 400 000 000" className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Organisation / Company Name</label>
-                                    <input type="text" placeholder="Your company or entity" className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Your Role / Position</label>
-                                    <input type="text" placeholder="e.g. Project Manager " className={inputClasses} />
-                                </div>
 
-                            </div>
-                        </section>
-
-                        <hr className="border-[#3D1A1A]/10" />
-                        <section>
-                            <p className={sectionHeaderClasses}>Section 02</p>
-                            <h2 className={sectionTitleClasses}>Project Location & Scale</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className={labelClasses}>Primary Country of Project *</label>
-                                    <select className={`${inputClasses} text-black/80`}>
-                                        <option className="text-black">Select Country</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Additional Countries Involved</label>
-                                    <input type="text" placeholder="e.g. Singapore, Malaysia " className={inputClasses} />
-                                </div>
                                 <div className="md:col-span-2">
-                                    <label className={labelClasses}>Project Location / Site Address</label>
-                                    <input type="text" placeholder="City, region or specific address of the project site " className={inputClasses} />
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Project Scale *</label>
-                                    <select className={`${inputClasses} text-black/80`}>
-                                        <option >Select Scale</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Estimated Project Value (AUD)</label>
-                                    <input type="number" placeholder="e.g. 2500000" className={inputClasses} />
-                                </div>
-                            </div>
-                        </section>
+                                    <label className={labelClasses}>
+                                        Full Name *
+                                    </label>
 
-                        <hr className="border-[#3D1A1A]/10" />
-                        <section>
-                            <p className={sectionHeaderClasses}>Section 03</p>
-                            <h2 className={sectionTitleClasses}>Project Details</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className={labelClasses}>Project Type *</label>
-                                    <select className={`${inputClasses} text-black/80`}>
-                                        <option className="text-black">Select Type</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className={labelClasses}>Estimated Project Timeline</label>
-                                    <select className={`${inputClasses} text-black/80`}>
-                                        <option className="text-black">Select Timeline</option>
-                                    </select>
-                                </div>
-                                <div className="md:col-span-2">
-                                    <label className={labelClasses}>Project Location / Site Address</label>
-                                    <input type="text" placeholder="Names of key international partners, co-investors or stakeholders  " className={inputClasses} />
-                                </div>
-                                <div className="md:col-span-2">
-                                    <label className={labelClasses}>Project Description *</label>
-
-                                    <textarea
-                                        rows={8}
-                                        placeholder="Describe the project in your own words - timeline, expected outcomes, any existing approvals or challenges, and what you’re looking for in a partner..."
-                                        className={`${inputClasses} resize-none `}
+                                    <input
+                                        required
+                                        type="text"
+                                        value={internationalDevelopmentForm.fullName}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                fullName: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. James Anderson"
+                                        className={inputClasses}
                                     />
                                 </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Email Address *
+                                    </label>
+
+                                    <input
+                                        required
+                                        type="email"
+                                        value={internationalDevelopmentForm.email}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        placeholder="james@example.com"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Phone Number *
+                                    </label>
+
+                                    <input
+                                        required
+                                        type="tel"
+                                        value={internationalDevelopmentForm.phone}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                phone: e.target.value,
+                                            })
+                                        }
+                                        placeholder="+61 400 000 000"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Organisation / Company Name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={internationalDevelopmentForm.organizationName}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                organizationName: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Your company or entity"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Your Role / Position
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={internationalDevelopmentForm.rolePosition}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                rolePosition: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. Project Manager"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
                             </div>
                         </section>
+
                         <hr className="border-[#3D1A1A]/10" />
+
+                        <section>
+                            <p className={sectionHeaderClasses}>Section 02</p>
+
+                            <h2 className={sectionTitleClasses}>
+                                Project Location & Scale
+                            </h2>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Primary Country of Project *
+                                    </label>
+
+                                    <select
+                                        required
+                                        value={internationalDevelopmentForm.primaryCountry}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                primaryCountry: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} text-black/80`}
+                                    >
+                                        <option value="">Select Country</option>
+                                        <option value="australia">Australia</option>
+                                        <option value="singapore">Singapore</option>
+                                        <option value="malaysia">Malaysia</option>
+                                        <option value="uae">UAE</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Additional Countries Involved
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={internationalDevelopmentForm.additionalCountries}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                additionalCountries: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. Singapore, Malaysia"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className={labelClasses}>
+                                        Project Location / Site Address
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={internationalDevelopmentForm.projectLocation}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                projectLocation: e.target.value,
+                                            })
+                                        }
+                                        placeholder="City, region or specific address of the project site"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Project Scale *
+                                    </label>
+
+                                    <select
+                                        required
+                                        value={internationalDevelopmentForm.projectScale}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                projectScale: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} text-black/80`}
+                                    >
+                                        <option value="">Select Scale</option>
+                                        <option value="small">Small Scale</option>
+                                        <option value="medium">Medium Scale</option>
+                                        <option value="large">Large Scale</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Estimated Project Value (AUD)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        value={internationalDevelopmentForm.estimatedProjectValue}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                estimatedProjectValue: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. 2500000"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <hr className="border-[#3D1A1A]/10" />
+
+                        <section>
+                            <p className={sectionHeaderClasses}>Section 03</p>
+
+                            <h2 className={sectionTitleClasses}>
+                                Project Details
+                            </h2>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Project Type *
+                                    </label>
+
+                                    <select
+                                        required
+                                        value={internationalDevelopmentForm.projectType}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                projectType: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} text-black/80`}
+                                    >
+                                        <option value="">Select Type</option>
+                                        <option value="residential">Residential</option>
+                                        <option value="commercial">Commercial</option>
+                                        <option value="infrastructure">Infrastructure</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className={labelClasses}>
+                                        Estimated Project Timeline
+                                    </label>
+
+                                    <select
+                                        value={internationalDevelopmentForm.projectTimeline}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                projectTimeline: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} text-black/80`}
+                                    >
+                                        <option value="">Select Timeline</option>
+                                        <option value="6_months">6 Months</option>
+                                        <option value="12_months">12 Months</option>
+                                        <option value="24_months">24 Months</option>
+                                    </select>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className={labelClasses}>
+                                        International Partners / Stakeholders
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={internationalDevelopmentForm.internationalPartners}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                internationalPartners: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Names of key international partners, co-investors or stakeholders"
+                                        className={inputClasses}
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className={labelClasses}>
+                                        Project Description *
+                                    </label>
+
+                                    <textarea
+                                        required
+                                        rows={8}
+                                        value={internationalDevelopmentForm.projectDescription}
+                                        onChange={(e) =>
+                                            setInternationalDevelopmentForm({
+                                                ...internationalDevelopmentForm,
+                                                projectDescription: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Describe the project in your own words - timeline, expected outcomes, any existing approvals or challenges, and what you’re looking for in a partner..."
+                                        className={`${inputClasses} resize-none`}
+                                    />
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <hr className="border-[#3D1A1A]/10" />
+
                         <section>
                             <p className={sectionHeaderClasses}>Section 04</p>
-                            <h2 className={sectionTitleClasses}>Supporting Documents</h2>
+
+                            <h2 className={sectionTitleClasses}>
+                                Supporting Documents
+                            </h2>
 
                             <label className="block border border-dashed border-[#3D1A1A]/10 bg-[#FAF6EF] p-12 text-center cursor-pointer">
-                                <input type="file" className="hidden" multiple />
+
+                                <input
+                                    required
+                                    type="file"
+                                    className="hidden"
+                                    multiple
+                                    onChange={(e) =>
+                                        setInternationalDevelopmentForm({
+                                            ...internationalDevelopmentForm,
+                                            documents: Array.from(e.target.files),
+                                        })
+                                    }
+                                />
+
                                 <svg
                                     className="mx-auto mb-4 opacity-30"
                                     width="28"
@@ -240,23 +607,43 @@ export default function International() {
                                     <path d="M12 16V4" />
                                     <path d="M8 8l4-4 4 4" />
                                 </svg>
+
                                 <p className="font-jost text-[14px] font-normal text-[#8C7B6B] uppercase mb-3">
                                     Upload Documents
                                 </p>
+
                                 <p className="font-jost text-[14px] font-light text-[#8C7B6B] uppercase">
-                                    Proof of Income · ID · Bank Statements — PDF, JPG, <br /> PNG accepted · Max 20MB each
+                                    Proof of Income · ID · Bank Statements — PDF, JPG,
+                                    <br />
+                                    PNG accepted · Max 20MB each
                                 </p>
+
                             </label>
+                            {internationalDevelopmentForm.documents.length > 0 && (
+                                <div className="mt-4 space-y-2">
+                                    {internationalDevelopmentForm.documents.map((file, index) => (
+                                        <p key={index} className="font-jost text-[14px] text-[#3B0D0D]">
+                                            {file.name}
+                                        </p>
+                                    ))}
+                                </div>
+                            )}
                         </section>
-                    
-                        <div className="flex flex-col md:flex-row  gap-18 pt-10">
+
+                        <div className="flex flex-col md:flex-row gap-18 pt-10">
+
                             <button className="w-full sm:w-auto bg-[#2D0A0A] text-white px-10 sm:px-20 md:px-32 lg:px-52 py-4 font-jost text-[14px] font-normal leading-[100%] tracking-normal uppercase hover:bg-black transition-colors">
                                 Submit Application
                             </button>
+
                             <p className="font-jost text-[14px] font-light leading-5 tracking-normal uppercase text-[#B2A79D] text-start">
-                                Protected by SSL encryption. <br /> Your data is never shared with third parties.
+                                Protected by SSL encryption.
+                                <br />
+                                Your data is never shared with third parties.
                             </p>
+
                         </div>
+
                     </form>
                 </main>
             </div>

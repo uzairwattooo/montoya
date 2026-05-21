@@ -1,36 +1,15 @@
-import Export from "@/public/icons/export.svg";
-const Documents = () => {
+import Link from "next/link";
+import Export from "../public/icons/export.svg";
+const Documents = ({ applications }) => {
+  const documents = applications.flatMap((app) =>
+    (app.documents || []).map((doc) => ({
+      ...doc,
+      category: app.name,
+      status: app.status,
+      date: app.created_at,
+    }))
+  );
 
-  const documents = [
-    {
-      name: 'Proof_of_Income_April2026.pdf',
-      size: '2.4 MB',
-      category: 'HOME LOAN APPLICATION',
-      status: 'UPLOADED',
-      date: '12 APR 2026'
-    },
-    {
-      name: 'Bank_Statements_Q1_2026.pdf',
-      size: '4.1 MB',
-      category: 'HOME LOAN APPLICATION',
-      status: 'UPLOADED',
-      date: '12 APR 2026'
-    },
-    {
-      name: 'Site_Plan_Development.pdf',
-      size: '6.8 MB',
-      category: 'DEVELOPMENT PARTNERSHIP',
-      status: 'UPLOADED',
-      date: '18 APR 2026'
-    },
-    {
-      name: 'International_Project_Proposal.pdf',
-      size: '3.5 MB',
-      category: 'INTERNATIONAL DEVELOPMENT',
-      status: 'UPLOADED',
-      date: '24 APR 2026'
-    }
-  ];
 
   return (
     <>
@@ -48,7 +27,7 @@ const Documents = () => {
             </div>
             <div className="space-y-6">
               <h3 className="font-jost text-[22px] font-normal text-[#8C7B6B]">
-                Uploaded Files (5)
+                Uploaded Files ({documents.length})
               </h3>
 
               <div className="bg-white border border-[#E9D6B2]/40 p-6 lg:p-10 space-y-5">
@@ -62,18 +41,26 @@ const Documents = () => {
                         {doc.name}
                       </h4>
                       <div className="font-jost text-[14px] font-light uppercase leading-5 tracking-normal text-[#93776B]">
-                        {doc.size} · {doc.category} · {doc.status} <br /> {doc.date}
+                        {doc.size
+                          ? `${(doc.size / 1024 / 1024).toFixed(1)} MB`
+                          : "Unknown Size"} ·
+                        {doc.category} ·
+                        {doc.status.replaceAll("_", " ")} <br /> {doc.date}
                       </div>
                     </div>
-                    <button
-                      type="button"
+                    <Link
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+
                       className="inline-flex items-center justify-center  bg-[#FAF6EF] text-[#3B0D0D] border border-[#491E1C] font-jost text-[14px] font-normal tracking-wider px-4 py-1.5  transition-all duration-200 hover:bg-[#3B0D0D] hover:text-[#F3E6CF] active:opacity-90 group"
                     >
-                      <span className="mt-2"><Export/></span>
+                      <span className="mt-2"><Export /></span>
                       <span className="uppercase font-medium tracking-wider">
                         Download
                       </span>
-                    </button>
+                    </Link>
                   </div>
                 ))}
               </div>

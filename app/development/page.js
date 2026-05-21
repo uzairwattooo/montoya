@@ -1,6 +1,11 @@
-import SmalFooter from "@/components/SmalFooter";
+"use client"
+import SmalFooter from "../../components/SmalFooter";
 import { Check, Play } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { authClient } from "../../lib/auth-client";
 
 const items = [
     { id: 1, name: "Joint Ventures" },
@@ -13,6 +18,117 @@ export default function Development() {
     const labelClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] uppercase text-[#977F7F] mb-2";
     const sectionTitleClasses = "font-cormorant text-[24px] font-[500] leading-[100%] tracking-[0] text-[#3B0D0D] mb-8";
     const sectionHeaderClasses = "font-jost text-[14px] font-[300] leading-[100%] tracking-[0] text-[#8C7B6B] uppercase mb-2";
+    const [developmentPartnershipForm, setDevelopmentPartnershipForm] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+
+        siteAddress: "",
+        developmentType: "",
+        currentZoning: "",
+
+        purchasePrice: "",
+        currentDebt: "",
+        expectedConstructionCosts: "",
+        expectedTotalSalesPrice: "",
+
+        documents: [],
+
+        projectDescription: "",
+        consent: false,
+    });
+    const router = useRouter();
+    const uploadDocuments = async (files, userId, type) => {
+        const uploadedFiles = [];
+
+        for (const file of files) {
+            const filePath = `${userId}/${type}/${Date.now()}-${file.name}`;
+
+            const { error } = await supabase.storage
+                .from("documents")
+                .upload(filePath, file);
+
+            if (error) {
+                throw error;
+            }
+            const { data } = supabase.storage
+                .from("documents")
+                .getPublicUrl(filePath);
+
+            uploadedFiles.push({
+                name: file.name,
+                path: filePath,
+                url: data.publicUrl,
+                size: file.size,
+            });
+        }
+        return uploadedFiles;
+    };
+    const handleDevelopmentPartnershipApply = async (e) => {
+        e.preventDefault();
+
+        const session = await authClient.getSession();
+        const user = session?.data?.user;
+
+        if (!user) {
+            router.push(`/login?redirect=${window.location.pathname}`);
+            return;
+        }
+
+        if (!developmentPartnershipForm.fullName) return alert("Full name is required");
+        if (!developmentPartnershipForm.email) return alert("Email is required");
+        if (!developmentPartnershipForm.phone) return alert("Phone is required");
+        if (!developmentPartnershipForm.siteAddress) return alert("Site address is required");
+        if (!developmentPartnershipForm.developmentType) return alert("Development type is required");
+        if (!developmentPartnershipForm.purchasePrice) return alert("Purchase price is required");
+        if (!developmentPartnershipForm.expectedConstructionCosts) return alert("Expected construction costs are required");
+        if (!developmentPartnershipForm.expectedTotalSalesPrice) return alert("Expected total sales price is required");
+        if (developmentPartnershipForm.documents.length === 0) return alert("Please upload documents");
+        if (!developmentPartnershipForm.consent) return alert("Consent is required");
+
+        const uploadedDocuments = await uploadDocuments(
+            developmentPartnershipForm.documents,
+            user.id,
+            "development-partnership"
+        );
+
+        const { error } = await supabase
+            .from("development_partnership_applications")
+            .insert({
+                user_id: user.id,
+
+                full_name: developmentPartnershipForm.fullName,
+                email: developmentPartnershipForm.email,
+                phone: developmentPartnershipForm.phone,
+
+                site_address: developmentPartnershipForm.siteAddress,
+                development_type: developmentPartnershipForm.developmentType,
+                current_zoning: developmentPartnershipForm.currentZoning,
+
+                purchase_price: developmentPartnershipForm.purchasePrice,
+                current_debt: developmentPartnershipForm.currentDebt,
+                expected_construction_costs:
+                    developmentPartnershipForm.expectedConstructionCosts,
+                expected_total_sales_price:
+                    developmentPartnershipForm.expectedTotalSalesPrice,
+
+                documents: uploadedDocuments,
+
+                project_description: developmentPartnershipForm.projectDescription,
+                consent: developmentPartnershipForm.consent,
+
+                status: "pending",
+            });
+
+        if (error) {
+            console.log(error);
+            alert(error.message);
+            return;
+        }
+
+        alert("Development partnership application submitted successfully");
+        router.push("/dashboard");
+    };
     return (
         <>
             <hr className="text-[#E8D5B0]" />
@@ -123,22 +239,58 @@ export default function Development() {
                 </div>
 
                 <main className="bg-white mb-10 shadow-sm p-8 md:p-16 lg:p-16 text-[#3D1A1A] w-full max-w-299.5 mx-auto">
-                    <form className="space-y-16">
+                    <form onSubmit={handleDevelopmentPartnershipApply} className="space-y-16">
                         <section>
                             <p className={sectionHeaderClasses}>Section 01</p>
                             <h2 className={sectionTitleClasses}>Applicant Information</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="md:col-span-2">
                                     <label className={labelClasses}>Full Name *</label>
-                                    <input type="password" placeholder="e.g. James Anderson" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="text"
+                                        value={developmentPartnershipForm.fullName}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                fullName: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. James Anderson"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Email Address *</label>
-                                    <input type="email" placeholder="james@example.com" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="email"
+                                        value={developmentPartnershipForm.email}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        placeholder="james@example.com"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Phone Number *</label>
-                                    <input type="tel" placeholder="+61 400 000 000" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="tel"
+                                        value={developmentPartnershipForm.phone}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                phone: e.target.value,
+                                            })
+                                        }
+                                        placeholder="+61 400 000 000"
+                                        className={inputClasses}
+                                    />
                                 </div>
 
                             </div>
@@ -152,17 +304,55 @@ export default function Development() {
 
                                 <div className="md:col-span-2">
                                     <label className={labelClasses}>Site Address *</label>
-                                    <input type="text" placeholder="Full address of the development site" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="text"
+                                        value={developmentPartnershipForm.siteAddress}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                siteAddress: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Full address of the development site"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Development Type *</label>
-                                    <select className={`${inputClasses} text-black/80`}>
-                                        <option >Select status</option>
+                                    <select
+                                        required
+                                        value={developmentPartnershipForm.developmentType}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                developmentType: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} text-black/80`}
+                                    >
+                                        <option value="">Select status</option>
+                                        <option value="residential">Residential</option>
+                                        <option value="commercial">Commercial</option>
+                                        <option value="mixed_use">Mixed Use</option>
+                                        <option value="industrial">Industrial</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Current Zoning</label>
-                                    <input type="text" placeholder="e.g. R20, R60, R80 " className={inputClasses} />
+                                    <input
+                                        required
+                                        type="text"
+                                        value={developmentPartnershipForm.currentZoning}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                currentZoning: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. R20, R60, R80"
+                                        className={inputClasses}
+                                    />
                                 </div>
                             </div>
                         </section>
@@ -175,20 +365,67 @@ export default function Development() {
                                 <div>
                                     <label className={labelClasses}>Purchase Price / Current Value (AUD) *
                                     </label>
-                                    <input type="number" placeholder="e.g. 1200000" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="number"
+                                        value={developmentPartnershipForm.purchasePrice}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                purchasePrice: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. 1200000"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Current Debt on Property (AUD)
                                     </label>
-                                    <input type="number" placeholder="e.g. 400000" className={inputClasses} />
+                                    <input
+                                        type="number"
+                                        value={developmentPartnershipForm.currentDebt}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                currentDebt: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. 400000"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Expected Construction Costs (AUD) *</label>
-                                    <input type="number" placeholder="e.g. 850000" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="number"
+                                        value={developmentPartnershipForm.expectedConstructionCosts}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                expectedConstructionCosts: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. 850000"
+                                        className={inputClasses}
+                                    />
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Expected Total Sales Price (AUD) *</label>
-                                    <input type="number" placeholder="e.g. 2800000" className={inputClasses} />
+                                    <input
+                                        required
+                                        type="number"
+                                        value={developmentPartnershipForm.expectedTotalSalesPrice}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                expectedTotalSalesPrice: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. 2800000"
+                                        className={inputClasses}
+                                    />
                                 </div>
 
                             </div>
@@ -199,7 +436,18 @@ export default function Development() {
                             <h2 className={sectionTitleClasses}>Supporting Documents</h2>
 
                             <label className="block border border-dashed border-[#3D1A1A]/10 bg-[#FAF6EF] p-12 text-center cursor-pointer">
-                                <input type="file" className="hidden" multiple />
+                                <input
+                                    required
+                                    type="file"
+                                    className="hidden"
+                                    multiple
+                                    onChange={(e) =>
+                                        setDevelopmentPartnershipForm({
+                                            ...developmentPartnershipForm,
+                                            documents: Array.from(e.target.files),
+                                        })
+                                    }
+                                />
                                 <svg
                                     className="mx-auto mb-4 opacity-30"
                                     width="28"
@@ -221,6 +469,15 @@ export default function Development() {
                                     Proof of Income · ID · Bank Statements — PDF, JPG, <br /> PNG accepted · Max 20MB each
                                 </p>
                             </label>
+                            {developmentPartnershipForm.documents.length > 0 && (
+                                <div className="mt-4 space-y-2">
+                                    {developmentPartnershipForm.documents.map((file, index) => (
+                                        <p key={index} className="font-jost text-[14px] text-[#3B0D0D]">
+                                            {file.name}
+                                        </p>
+                                    ))}
+                                </div>
+                            )}
                         </section>
                         <hr className="border-[#3D1A1A]/10" />
                         <section>
@@ -229,14 +486,32 @@ export default function Development() {
                             <div className="space-y-6">
                                 <div>
                                     <label className={labelClasses}>Tell us about your project</label>
-                                    <textarea rows={8} className={`${inputClasses} mt-3 rounded-lg`} placeholder="Describe the project in your own words - timeline, expected outcomes, any existing approvals or challenges, and what you’re looking for in a partner..."></textarea>
+                                    <textarea
+                                        rows={8}
+                                        value={developmentPartnershipForm.projectDescription}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                projectDescription: e.target.value,
+                                            })
+                                        }
+                                        className={`${inputClasses} mt-3 rounded-lg`}
+                                        placeholder="Describe the project in your own words - timeline, expected outcomes, any existing approvals or challenges, and what you’re looking for in a partner..."
+                                    ></textarea>
                                 </div>
                                 <label className="flex items-start gap-4 cursor-pointer">
                                     <input
+                                        required
                                         type="checkbox"
+                                        checked={developmentPartnershipForm.consent}
+                                        onChange={(e) =>
+                                            setDevelopmentPartnershipForm({
+                                                ...developmentPartnershipForm,
+                                                consent: e.target.checked,
+                                            })
+                                        }
                                         className=" mt-1 min-w-11 h-10 appearance-none border border-[#E9D6B2] bg-[#FAF6EF] checked:bg-[#3B0D0D] checked:border-[#3B0D0D] relative checked:after:content-['✓'] checked:after:text-white checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
                                     />
-
                                     <span className="font-jost text-[14px] sm:text-[16px] font-light leading-6 tracking-normal uppercase text-[#B4B4B4]">
                                         I confirm that the information provided is accurate to the best of my knowledge, and I consent to Montoya Roe reviewing and assessing my application in accordance with the Australian Privacy Act and GDPR guidelines.
 

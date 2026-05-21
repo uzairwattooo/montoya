@@ -1,19 +1,117 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import AdminOne from '@/components/AdminOne';
-import AdminAll from '@/components/AdminAll';
-import AdminFinance from '@/components/AdminFinance';
+import AdminOne from '../../../components/AdminOne';
+import AdminAll from '../../../components/AdminAll';
 import Link from 'next/link';
-import DashboardIcon from "@/public/icons/material-symbols-light_dashboard-outline.svg";
-import SettingIcon from "@/public/icons/settings.svg";
-import FileIcon from "@/public/icons/ph_files-light.svg";
-import SignoutIcon from "@/public/icons/signout.svg";
+import DashboardIcon from "../../../public/icons/material-symbols-light_dashboard-outline.svg";
+import SettingIcon from "../../../public/icons/settings.svg";
+import FileIcon from "../../../public/icons/ph_files-light.svg";
+import SignoutIcon from "../../../public/icons/signout.svg";
+import { authClient } from '../../../lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { supabase } from '../../../lib/supabase';
+
 
 export default function AdminDashboardMean() {
     const [activePage, setActivePage] = useState("dashboard");
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const router = useRouter();
+    const [authorized, setAuthorized] = useState(false);
+    const [applications, setApplications] = useState([])
+    const fetchAllApplications = async () => {
+        const { data: home } = await supabase
+            .from("home_loan_applications")
+            .select("*");
+
+        const { data: devLoan } = await supabase
+            .from("development_loan_applications")
+            .select("*");
+
+        const { data: devPartner } = await supabase
+            .from("development_partnership_applications")
+            .select("*");
+
+        const { data: international } = await supabase
+            .from("international_development_applications")
+            .select("*");
+
+        const allApps = [
+            ...(home || []).map((app) => ({
+                ...app,
+                name: app.full_name,
+                type: "Finance",
+                title: "Home Loan Application",
+                table: "home_loan_applications"
+            })),
+
+            ...(devLoan || []).map((app) => ({
+                ...app,
+                name: app.full_name,
+                type: "Development",
+                title: "Development Loan Application",
+                table: "development_loan_applications"
+            })),
+
+            ...(devPartner || []).map((app) => ({
+                ...app,
+                name: app.full_name,
+                type: "Development",
+                title: "Development Partnership",
+                table: "development_partnership_applications"
+            })),
+
+            ...(international || []).map((app) => ({
+                ...app,
+                name: app.full_name,
+                type: "International",
+                title: "International Development",
+                table: "international_development_applications"
+            })),
+        ];
+
+        setApplications(allApps);
+    };
+    useEffect(() => {
+        const checkRole = async () => {
+            const session = await authClient.getSession();
+            const user = session?.data?.user;
+            if (!user) {
+                router.replace("/admin");
+                return;
+            }
+            const { data: profile } = await supabase
+                .from("profile")
+                .select("role")
+                .eq("user_id", user.id)
+                .single();
+            if (profile?.role !== "admin") {
+                router.replace("/dashboard");
+                return;
+            }
+            setAuthorized(true);
+            fetchAllApplications();
+        };
+        checkRole();
+    }, []);
+    if (!authorized) {
+        return null;
+    }
+    const handleSignout = async () => {
+        await authClient.signOut();
+        router.push("/login")
+    }
+
+    const currentDate = new Date().toLocaleDateString(
+        "en-GB",
+        {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        }
+    );
     return (
         <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-[#FAF6EF] overflow-hidden">
             {sidebarOpen && (
@@ -150,7 +248,7 @@ export default function AdminDashboardMean() {
                     </nav>
                 </div>
                 <div className="p-6 md:p-8 lg:ml-7  text-center">
-                    <button className="flex items-center text-end gap-3 px-4 py-3 border border-[#E9D6B2]/30  bg-transparent text-[#7C5E5C] hover:text-[#F3E6CF] hover:border-[#F3E6CF]/40 transition-all duration-200 group">
+                    <button onClick={handleSignout} className="flex items-center text-end gap-3 px-4 py-3 border border-[#E9D6B2]/30  bg-transparent text-[#7C5E5C] hover:text-[#F3E6CF] hover:border-[#F3E6CF]/40 transition-all duration-200 group">
 
                         <span><SignoutIcon /></span>
 
@@ -176,16 +274,57 @@ export default function AdminDashboardMean() {
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="font-jost text-[14px] font-light uppercase text-[#93776B] tracking-wider hidden sm:block">
-                            Wednesday 29 April 2026
+                            {currentDate}
                         </span>
                         <div className="w-8 h-8 rounded-full bg-[#3B0D0D] text-[#F3E6CF] flex items-center justify-center font-jost text-[12px] font-medium uppercase tracking-tighter">
-                            JA
+                            AD
                         </div>
                     </div>
                 </header>
-                {activePage === "dashboard" && <AdminOne />}
-                {activePage === "allaplications" && <AdminAll />}
-                {activePage === "Finance" && <AdminFinance />}
+                {activePage === "dashboard" && (
+                    <AdminOne
+                        applications={applications}
+                        setApplications={setApplications}
+                    />
+                )}
+
+                {activePage === "allaplications" && (
+                    <AdminAll
+                        title="All Applications"
+                        applications={applications}
+                        setApplications={setApplications}
+                    />
+                )}
+
+                {activePage === "Finance" && (
+                    <AdminAll
+                        title="Finance"
+                        applications={applications.filter(
+                            (app) => app.type === "Finance"
+                        )}
+                        setApplications={setApplications}
+                    />
+                )}
+
+                {activePage === "development" && (
+                    <AdminAll
+                        title="Development"
+                        applications={applications.filter(
+                            (app) => app.type === "Development"
+                        )}
+                        setApplications={setApplications}
+                    />
+                )}
+
+                {activePage === "international" && (
+                    <AdminAll
+                        title="International"
+                        applications={applications.filter(
+                            (app) => app.type === "International"
+                        )}
+                        setApplications={setApplications}
+                    />
+                )}
             </div>
         </div>
     );
