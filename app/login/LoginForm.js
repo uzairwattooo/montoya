@@ -12,12 +12,19 @@ const LoginForm = () => {
         email: "",
         password: ""
     })
+    const [loading, setLoading] = useState(false);
+
     const router = useRouter()
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get("redirect") || "/dashboard";
 
     const handleLogin = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        if (loading) return;
+
+        setLoading(true);
+
         const res = await authClient.signIn.email({
             email: form.email,
             password: form.password,
@@ -25,20 +32,30 @@ const LoginForm = () => {
 
         if (res.error) {
             alert(res.error.message);
+            setLoading(false);
             return;
         }
+
         const user = res.data?.user;
-        if (!user) return;
+
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+
         const { data: profile } = await supabase
             .from("profile")
             .select("role")
             .eq("user_id", user.id)
-            .maybeSingle()
+            .maybeSingle();
+
         if (profile?.role === "admin") {
             router.push("/admin/admindashboard");
         } else {
             router.push(redirectTo);
         }
+
+        setLoading(false);
     };
     return (
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-white">
@@ -122,9 +139,10 @@ const LoginForm = () => {
 
                         <button
                             type="submit"
+                            disabled={loading}
                             className="w-full bg-[#3B0D0D] text-[#FFF5EB] py-4 rounded-sm text-[14px] uppercase tracking-normal font-normal font-jost hover:bg-[#421A1B] transition-colors duration-300 mt-2 shadow-sm"
                         >
-                            Sign In to Portal
+                            {loading ? "Signing In..." : "Sign In to Portal"}
                         </button>
                     </form>
 
