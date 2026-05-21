@@ -52,7 +52,11 @@ const LoginForm = () => {
         if (profile?.role === "admin") {
             router.push("/admin/admindashboard");
         } else {
-            router.push(redirectTo);
+            if (redirectTo.startsWith("/admin/admindashboard")) {
+                router.push("/dashboard");
+            } else {
+                router.push(redirectTo);
+            }
         }
 
         setLoading(false);
@@ -127,8 +131,10 @@ const LoginForm = () => {
                             <label className="font-jost text-[14px] font-light leading-[100%] tracking-normal uppercase text-[#977F7F]">
                                 Password
                             </label>
-                            <input required
+                            <input
+                                required
                                 type="password"
+                                value={form.password}
                                 onChange={(e) =>
                                     setForm({ ...form, password: e.target.value })
                                 }
