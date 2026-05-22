@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const [step, setStep] = useState(1);
+    const [emailError, setEmailError] = useState("");
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -27,31 +28,27 @@ export default function Signup() {
             alert("First name is required");
             return false;
         }
+
         if (!form.lastName) {
             alert("Last name is required");
             return false;
         }
+
         if (!form.email) {
             alert("Email is required");
             return false;
         }
+
         if (!form.phone) {
             alert("Phone is required");
             return false;
         }
+
         if (!form.country) {
             alert("Country is required");
             return false;
         }
-        const { data } = await supabase
-            .from("user")
-            .select("email")
-            .eq("email", form.email)
-            .single();
-        if (data) {
-            alert("Email already exists");
-            return false;
-        }
+
         return true;
     };
     const validateStep2 = () => {
@@ -71,6 +68,7 @@ export default function Signup() {
     };
     const handleSignup = async (e) => {
         e.preventDefault();
+        setEmailError("");
         if (!form.agreeTerms) {
             alert("Please accept Terms & Conditions");
             return;
@@ -85,7 +83,17 @@ export default function Signup() {
             name: form.firstName + " " + form.lastName,
         });
         if (res.error) {
-            alert(res.error.message);
+
+            if (
+                res.error.message
+                    .toLowerCase()
+                    .includes("user already exists")
+            ) {
+                setEmailError("Email already exists");
+            } else {
+                alert(res.error.message);
+            }
+
             return;
         }
         const userId = res.data?.user?.id;
@@ -203,7 +211,7 @@ export default function Signup() {
                                             <label className="font-jost text-[14px] font-light uppercase leading-[100%] text-[#93776B]">
                                                 First Name *
                                             </label>
-                                            <input 
+                                            <input
                                                 type="text"
                                                 required
                                                 value={form.firstName}
@@ -242,6 +250,11 @@ export default function Signup() {
                                             placeholder="your@example.com"
                                             className="w-full bg-[#FFF4E0] border-none p-4 rounded-lg font-jost text-[14px] text-[#3B0D0D] placeholder:text-[#ACA79D]/50 focus:ring-1 focus:ring-[#3B0D0D]/20 outline-none transition-all"
                                         />
+                                        {emailError && (
+                                            <p className="text-red-500 text-[12px] font-jost mt-1">
+                                                {emailError}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <label className="font-jost text-[14px] font-light uppercase leading-[100%] text-[#93776B]">
