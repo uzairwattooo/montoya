@@ -39,14 +39,10 @@ const LoginForm = () => {
             .select("role")
             .eq("user_id", user.id)
             .maybeSingle();
-        console.log("PROFILE:", profile);
-        console.log("PROFILE ERROR:", profileError);
         if (profile?.role === "admin") {
             window.location.href = "/admin/admindashboard";
         } else {
-            window.location.href = redirectTo.startsWith("/admin")
-                ? "/dashboard"
-                : redirectTo;
+            window.location.href = "/dashboard";
         }
         setLoading(false);
     };
