@@ -58,7 +58,21 @@ export default function AdminAllApplications({
                 return status;
         }
     };
+const getStatusLabel = (status) => {
+    switch (status) {
+        case "pending":
+            return "PENDING INFO";
 
+        case "under_review":
+            return "UNDER REVIEW";
+
+        case "reviewed":
+            return "REVIEWED";
+
+        default:
+            return status.replaceAll("_", " ");
+    }
+};
     const handleStatusUpdate = async (table, id, nextStatus) => {
         const { error } = await supabase
             .from(table)
@@ -281,7 +295,7 @@ export default function AdminAllApplications({
                                             )}`}
                                         >
                                             <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>
-                                            <span>{row.status.replaceAll("_", " ")}</span>
+                                            <span>{getStatusLabel(row.status)}</span>
                                         </span>
                                     </td>
 
