@@ -19,8 +19,8 @@ const ClientDashboard = () => {
         const fetchApplications = async () => {
             const session = await authClient.getSession();
             const user = session?.data?.user;
-            setUserName(user.name || "User");
             if (!user) return;
+            setUserName(user.name || "User");
             const { data: home } = await supabase.from("home_loan_applications").select("*").eq("user_id", user.id);
             const { data: devLoan } = await supabase.from("development_loan_applications").select("*").eq("user_id", user.id);
             const { data: devPartner } = await supabase.from("development_partnership_applications").select("*").eq("user_id", user.id);

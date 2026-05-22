@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { authClient } from "../../lib/auth-client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 const LoginForm = () => {
@@ -13,6 +13,7 @@ const LoginForm = () => {
         password: ""
     })
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get("redirect") || "/dashboard";
     const handleLogin = async (e) => {
@@ -23,7 +24,6 @@ const LoginForm = () => {
             email: form.email,
             password: form.password,
         });
-        console.log("LOGIN RESPONSE:", res);
         if (res.error) {
             alert(res.error.message);
             setLoading(false);
@@ -40,9 +40,13 @@ const LoginForm = () => {
             .eq("user_id", user.id)
             .maybeSingle();
         if (profile?.role === "admin") {
-            window.location.href = "/admin/admindashboard";
+            router.push("/admin/admindashboard");
         } else {
-            window.location.href = "/dashboard";
+            router.push(
+                redirectTo.startsWith("/admin")
+                    ? "/dashboard"
+                    : redirectTo
+            );
         }
         setLoading(false);
     };

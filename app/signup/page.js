@@ -11,6 +11,10 @@ import { useRouter } from "next/navigation";
 export default function Signup() {
     const [step, setStep] = useState(1);
     const [emailError, setEmailError] = useState("");
+    const [emailTouched, setEmailTouched] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -23,6 +27,10 @@ export default function Signup() {
         agreePrivacy: false,
     });
     const router = useRouter()
+    const showMessage = (text, type = "error") => {
+        setMessage(text);
+        setMessageType(type);
+    };
     const validateStep1 = async () => {
         if (!form.firstName) {
             alert("First name is required");
@@ -67,6 +75,8 @@ export default function Signup() {
         return true;
     };
     const handleSignup = async (e) => {
+        if (loading) return;
+        setLoading(true);
         e.preventDefault();
         setEmailError("");
         if (!form.agreeTerms) {
@@ -83,15 +93,18 @@ export default function Signup() {
             name: form.firstName + " " + form.lastName,
         });
         if (res.error) {
+            const errorMessage = res.error.message?.toLowerCase() || "";
 
             if (
-                res.error.message
-                    .toLowerCase()
-                    .includes("user already exists")
+                errorMessage.includes("already") ||
+                errorMessage.includes("duplicate") ||
+                errorMessage.includes("failed to create user")
             ) {
-                setEmailError("Email already exists");
+                setStep(1);
+                setEmailError("This email is already registered");
+                showMessage("This email is already registered");
             } else {
-                alert(res.error.message);
+                showMessage(res.error.message);
             }
 
             return;
@@ -108,7 +121,7 @@ export default function Signup() {
             agree_privacy: form.agreePrivacy,
             role: "client",
         });
-        alert("Account created successfully");
+        showMessage("Account created successfully", "success");
         router.push("/login")
     };
     return (
@@ -203,6 +216,16 @@ export default function Signup() {
                                 </span>
                             </div>
                         </div>
+                        {message && (
+                            <div
+                                className={`mb-5 border px-4 py-3 font-jost text-[14px] rounded-sm ${messageType === "success"
+                                    ? "bg-[#E7F6EC] text-[#2E7D4F] border-[#B7DFC5]"
+                                    : "bg-[#FFF4E0] text-[#8A3A2A] border-[#E9D6B2]"
+                                    }`}
+                            >
+                                {message}
+                            </div>
+                        )}
                         <form onSubmit={handleSignup} className="space-y-6">
                             {step === 1 && (
                                 <div className="space-y-6">
@@ -247,6 +270,7 @@ export default function Signup() {
                                             onChange={(e) =>
                                                 setForm({ ...form, email: e.target.value })
                                             }
+                                            onBlur={() => setEmailTouched(true)}
                                             placeholder="your@example.com"
                                             className="w-full bg-[#FFF4E0] border-none p-4 rounded-lg font-jost text-[14px] text-[#3B0D0D] placeholder:text-[#ACA79D]/50 focus:ring-1 focus:ring-[#3B0D0D]/20 outline-none transition-all"
                                         />
@@ -428,9 +452,11 @@ export default function Signup() {
                                 {step === 3 && (
                                     <button
                                         type="submit"
+                                        disabled={loading}
                                         className="w-full bg-[#3B0D0D] text-[#F3E6CF] font-jost text-[14px] uppercase font-normal py-3 hover:bg-black transition text-center"
                                     >
-                                        create account
+                                        {loading ? "Creating Account..." : "create account"}
+
                                     </button>
                                 )}
                             </div>
