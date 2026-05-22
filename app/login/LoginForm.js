@@ -29,6 +29,7 @@ const LoginForm = () => {
             email: form.email,
             password: form.password,
         });
+        console.log("LOGIN RESPONSE:", res);
 
         if (res.error) {
             alert(res.error.message);
