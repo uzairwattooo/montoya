@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { authClient } from "../../lib/auth-client";
-import { useRouter, useSearchParams } from "next/navigation";
+// import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 const LoginForm = () => {
@@ -13,46 +13,35 @@ const LoginForm = () => {
         password: ""
     })
     const [loading, setLoading] = useState(false);
-
-    const router = useRouter()
+    // const router = useRouter()
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get("redirect") || "/dashboard";
-
     const handleLogin = async (e) => {
         e.preventDefault();
-
         if (loading) return;
-
         setLoading(true);
-
         const res = await authClient.signIn.email({
             email: form.email,
             password: form.password,
         });
         console.log("LOGIN RESPONSE:", res);
-
         if (res.error) {
             alert(res.error.message);
             setLoading(false);
             return;
         }
-
         const user = res.data?.user;
-
         if (!user) {
             setLoading(false);
             return;
         }
-
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
             .from("profile")
             .select("role")
             .eq("user_id", user.id)
             .maybeSingle();
-
         console.log("PROFILE:", profile);
         console.log("PROFILE ERROR:", profileError);
-
         if (profile?.role === "admin") {
             window.location.href = "/admin/admindashboard";
         } else {
@@ -60,7 +49,6 @@ const LoginForm = () => {
                 ? "/dashboard"
                 : redirectTo;
         }
-
         setLoading(false);
     };
     return (
