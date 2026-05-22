@@ -50,14 +50,15 @@ const LoginForm = () => {
             .eq("user_id", user.id)
             .maybeSingle();
 
+        console.log("PROFILE:", profile);
+        console.log("PROFILE ERROR:", profileError);
+
         if (profile?.role === "admin") {
-            router.push("/admin/admindashboard");
+            window.location.href = "/admin/admindashboard";
         } else {
-            if (redirectTo.startsWith("/admin/admindashboard")) {
-                router.push("/dashboard");
-            } else {
-                router.push(redirectTo);
-            }
+            window.location.href = redirectTo.startsWith("/admin")
+                ? "/dashboard"
+                : redirectTo;
         }
 
         setLoading(false);
