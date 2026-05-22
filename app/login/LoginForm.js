@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { authClient } from "../../lib/auth-client";
-// import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 const LoginForm = () => {
@@ -13,7 +13,6 @@ const LoginForm = () => {
         password: ""
     })
     const [loading, setLoading] = useState(false);
-    // const router = useRouter()
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get("redirect") || "/dashboard";
     const handleLogin = async (e) => {
