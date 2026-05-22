@@ -10,7 +10,7 @@ export default function Admin_Dashboard({ applications, setApplications }) {
             case "under_review":
                 return "bg-[#EEF4FB] text-[#37618B] border-[#A9C4E2]";
 
-            case "pending_info":
+            case "pending":
                 return "bg-[#FFF9EC] text-[#8A6F1D] border-[#F2DEB4]";
 
             case "reviewed":
@@ -22,33 +22,54 @@ export default function Admin_Dashboard({ applications, setApplications }) {
     };
     const getActionLabel = (status) => {
         switch (status) {
-            case "under_review":
-                return "MARK AS REVIEWED";
+            case "pending":
+                return "START REVIEW";
 
-            case "pending_info":
+            case "under_review":
                 return "MARK AS REVIEWED";
 
             case "reviewed":
                 return "VIEW APPLICATION";
 
-            default:
+            case "pending":
                 return "MARK AS REVIEWED";
+
+            default:
+                return "START REVIEW";
         }
     };
 
     const getNextStatus = (status) => {
         switch (status) {
+            case "pending":
+                return "under_review";
+
             case "under_review":
                 return "reviewed";
 
-            case "pending_info":
+            case "pending":
                 return "reviewed";
 
             case "reviewed":
                 return "reviewed";
 
             default:
-                return "reviewed";
+                return "under_review";
+        }
+    };
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case "pending":
+                return "PENDING INFO";
+
+            case "under_review":
+                return "UNDER REVIEW";
+
+            case "reviewed":
+                return "REVIEWED";
+
+            default:
+                return status.replaceAll("_", " ");
         }
     };
     const handleStatusUpdate = async (
@@ -85,7 +106,7 @@ export default function Admin_Dashboard({ applications, setApplications }) {
     ).length;
 
     const pendingInfo = applications.filter(
-        (app) => app.status === "pending_info"
+        (app) => app.status === "pending"
     ).length;
 
     const reviewed = applications.filter(
@@ -222,7 +243,7 @@ export default function Admin_Dashboard({ applications, setApplications }) {
         ${getStatusColors(row.status)}`}
                                             >
                                                 <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>
-                                                <span>{row.status.replaceAll("_", " ")}</span>
+                                                <span>{getStatusLabel(row.status)}</span>
                                             </span>
                                         </td>
                                         <td >

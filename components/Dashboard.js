@@ -3,8 +3,8 @@ export default function Dashboard({ applications, userName }) {
     const underReview = applications.filter(
         (app) => app.status === "under_review"
     ).length;
-    const pendingInfo = applications.filter(
-        (app) => app.status === "pending_info"
+    const pending = applications.filter(
+        (app) => app.status === "pending"
     ).length;
 
     const statCards = [
@@ -22,7 +22,7 @@ export default function Dashboard({ applications, userName }) {
 
         {
             label: "PENDING INFO",
-            count: pendingInfo,
+            count: pending,
             sub: "Additional details required",
         },
     ];
@@ -31,7 +31,7 @@ export default function Dashboard({ applications, userName }) {
             case "under_review":
                 return "bg-[#EEF4FB] text-[#37618B] border-[#A9C4E2]";
 
-            case "pending_info":
+            case "pending":
                 return "bg-[#FFF9EC] text-[#8A6F1D] border-[#F2DEB4]";
 
             case "reviewed":
@@ -39,6 +39,21 @@ export default function Dashboard({ applications, userName }) {
 
             default:
                 return "bg-gray-100 text-gray-600 border-gray-300";
+        }
+    };
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case "pending":
+                return "PENDING INFO";
+
+            case "under_review":
+                return "UNDER REVIEW";
+
+            case "reviewed":
+                return "REVIEWED";
+
+            default:
+                return status.replaceAll("_", " ");
         }
     };
     const capitalizeName = (name) => {
@@ -134,7 +149,7 @@ export default function Dashboard({ applications, userName }) {
                                                     className={`inline-flex items-center gap-2 w-full sm:w-25 h-11 px-2.5 rounded-sm text-[11px] font-jost uppercase tracking-wider border font-medium ${getStatusColors(app.status)}`}
                                                 >
                                                     <span className="w-1.25 h-1.25 rounded-full bg-current shrink-0"></span>
-                                                    <span>{app.status.replaceAll("_", " ")}</span>
+                                                    <span>{getStatusLabel(app.status)}</span>
                                                 </span>
                                             </td>
                                         </tr>

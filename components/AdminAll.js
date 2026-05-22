@@ -20,8 +20,8 @@ export default function AdminAllApplications({
             case "under_review":
                 return "bg-[#E3EDF7] text-[#2F5B88] border-[#A9C4E2]";
 
-            case "pending_info":
-            case "pending_info":
+            case "pending":
+            case "pending":
                 return "bg-[#FFF9E6] text-[#8A6D22] border-[#F2DEB4]";
 
             case "reviewed":
@@ -35,8 +35,8 @@ export default function AdminAllApplications({
     const getActionLabel = (status) => {
         switch (status) {
             case "under_review":
-            case "pending_info":
-            case "pending_info":
+            case "pending":
+            case "pending":
                 return "MARK AS REVIEWED";
 
             case "reviewed":
@@ -50,8 +50,8 @@ export default function AdminAllApplications({
     const getNextStatus = (status) => {
         switch (status) {
             case "under_review":
-            case "pending_info":
-            case "pending_info":
+            case "pending":
+            case "pending":
                 return "reviewed";
 
             default:
@@ -179,7 +179,7 @@ export default function AdminAllApplications({
                                 All Status
                             </option>
 
-                            <option value="pending_info">
+                            <option value="pending">
                                 Pending
                             </option>
 
@@ -187,7 +187,7 @@ export default function AdminAllApplications({
                                 Under Review
                             </option>
 
-                            <option value="pending_info">
+                            <option value="pending">
                                 Pending Info
                             </option>
 
